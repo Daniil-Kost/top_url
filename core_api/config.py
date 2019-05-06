@@ -1,3 +1,7 @@
+from lemkpg import AsyncLemkPgApi
+
+db_conn = AsyncLemkPgApi(db_name="urls_database", db_password="postgres", db_user="postgres", db_host="localhost")
+
 DEFAULT_DOMAIN = "http://localhost:8000"
 DB_NAME = "urls_database"
 DB_USER = "postgres"

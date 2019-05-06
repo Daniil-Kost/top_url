@@ -4,9 +4,8 @@ from sanic.views import HTTPMethodView
 from sanic import response
 from http import HTTPStatus
 
-from .app import db_conn
 from .utils import response_converter, prepare_post_url_data
-from .config import URLS_TABLE, PROFILE_TABLE, URLS_COLUMNS, PROFILE_COLUMNS
+from .config import URLS_TABLE, PROFILE_TABLE, URLS_COLUMNS, PROFILE_COLUMNS, db_conn
 
 
 class UrlsView(HTTPMethodView):
