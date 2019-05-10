@@ -2,37 +2,47 @@ from core_api.config import db_conn
 import asyncio
 
 
-# check existing users tables (public.app_user', 'public.user_urls')
-async def _check_user_tables_existing():
-    query = "SELECT 'public.app_user', 'public.user_urls'::regclass"
+# check existing users tables (public.app_user')
+async def _check_user_table_existing():
+    query = "SELECT to_regclass('public.app_user')"
     result = await db_conn.raw_query(query)
-    if 'public.app_user' not in result[0] and 'user_urls' not in result[0]:
-        await create_user_tables()
-    elif 'public.app_user' in result[0] and 'user_urls' not in result[0]:
-        print(f"User table: 'user_urls' does not exist in DB")
-    elif 'user_urls' in result[0] and 'public.app_user' not in result[0]:
-        print(f"User table: 'public.app_user' does not exist in DB")
+    print(result)
+    if 'app_user' not in result[0]:
+        await create_user_table()
     else:
-        print(f"User tables: {result[0]} exists in DB")
+        print(f"User table: 'app_user' exists in DB")
 
 
 # check existing url table (public.app_url')
 async def _check_url_table_existing():
-    query = "SELECT 'public.app_url'::regclass"
+    query = "SELECT to_regclass('public.app_url')"
     result = await db_conn.raw_query(query)
+    print(result)
     if 'app_url' not in result[0]:
         await create_url_table()
     else:
         print(f"Url table: 'app_url' exists in DB")
 
 
+# check existing url table (public.user_urls')
+async def _check_user_urls_table_existing():
+    query = "SELECT to_regclass('public.user_urls')"
+    result = await db_conn.raw_query(query)
+    print(result)
+    if 'user_urls' not in result[0]:
+        await create_user_urls_table()
+    else:
+        print(f"User Urls table: 'user_urls' exists in DB")
+
+
 async def check_existing_tables():
+    await _check_user_table_existing()
     await _check_url_table_existing()
-    await _check_user_tables_existing()
+    await _check_user_urls_table_existing()
 
 
-# Create user tables:
-async def create_user_tables():
+# Create user table:
+async def create_user_table():
     user_query = """
     CREATE TABLE public.app_user (
     id integer DEFAULT NULL,
@@ -51,6 +61,11 @@ async def create_user_tables():
     await db_conn.raw_query(user_seq_query)
     await db_conn.raw_query(user_id_query)
 
+    print("User table created!")
+
+
+# Create user urls table:
+async def create_user_urls_table():
     user_urls_query = """
     CREATE TABLE user_urls
     (
@@ -62,7 +77,7 @@ async def create_user_tables():
       REFERENCES public.app_user (id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
       CONSTRAINT user_urls_url_id_5de65233_fk_app_url_id FOREIGN KEY (url_id)
-      REFERENCES public.app_url (id) MATCH SIMPLE
+      REFERENCES app_url (id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
       CONSTRAINT user_urls_user_id_url_id_2655d850_uniq UNIQUE (user_id, url_id)
       )
@@ -79,7 +94,7 @@ async def create_user_tables():
     await db_conn.raw_query(user_urls_seq_query)
     await db_conn.raw_query(user_urls_id_query)
 
-    print("User tables created!")
+    print("User Urls table created!")
 
 
 # Create url table:
