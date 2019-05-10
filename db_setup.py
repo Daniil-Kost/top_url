@@ -5,7 +5,7 @@ import asyncio
 async def check_user_tables_existing():
     query = "SELECT 'public.app_user', 'public.user_urls'::regclass"
     result = await db_conn.raw_query(query)
-    if not 'public.app_user' and 'user_urls' in result[0]:
+    if 'public.app_user' not in result[0] and 'user_urls' not in result[0]:
         await create_user_tables()
     elif 'public.app_user' in result[0] and 'user_urls' not in result[0]:
         print(f"User table: 'user_urls' does not exist in DB")
