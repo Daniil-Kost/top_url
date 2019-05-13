@@ -13,16 +13,16 @@ app = Sanic("app")
 
 @app.middleware('request')
 async def check_authorization_and_add_user_to_request(request):
-    if not request.token:
+    if not request.token and request.path not in ["/api/v1/auth", "/api/v1/register"]:
         raise Unauthorized("Authorization should be defined in request headers")
     else:
         result = await db_conn.get(USER_TABLE, GET_ALL_COLUMNS,
                                    conditions_list=[("token", "=", request.token, None)])
-        if not result:
+        if not result and request.path not in ["/api/v1/auth", "/api/v1/register"]:
             raise Unauthorized("Authorization with Token should be defined in request headers")
-        user = response_converter(result, USER_COLUMNS, ("password",))[0]
-        request["user"] = user
-
+        if result and request.path not in ["/api/v1/auth", "/api/v1/register"]:
+            user = response_converter(result, USER_COLUMNS, ("password",))[0]
+            request["user"] = user
 
 api_v1 = Blueprint("v1", url_prefix="/api/v1", strict_slashes=False)
 
