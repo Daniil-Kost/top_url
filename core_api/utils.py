@@ -62,7 +62,7 @@ def prepare_post_url_data(request_data):
     return data
 
 
-def prepare_user_register_data(request_data):
+def prepare_user_registration_data(request_data):
     data = {}
     data["uuid"] = str(uuid.uuid4())
     data["username"] = request_data["username"]

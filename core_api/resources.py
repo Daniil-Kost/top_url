@@ -9,7 +9,7 @@ from .forms import CreateNewShortUrlForm, UserRegistrationForm, UserAuthForm
 from .utils import (
     response_converter,
     prepare_post_url_data,
-    prepare_user_register_data,
+    prepare_user_registration_data,
     check_username_existing, )
 
 
@@ -60,7 +60,7 @@ class RegisterView(HTTPMethodView):
             return response.json(errors, HTTPStatus.BAD_REQUEST)
         if await check_username_existing(form_data["username"]):
             return response.json({"error": "User with this username already exist"}, HTTPStatus.CONFLICT)
-        data = prepare_user_register_data(form_data)
+        data = prepare_user_registration_data(form_data)
         try:
             await db_conn.insert(USER_TABLE, tuple(data.values()),
                                  ("uuid", "username", "password", "token"))
