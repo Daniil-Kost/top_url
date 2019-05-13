@@ -1,7 +1,8 @@
-from core_api.config import db_conn
 import asyncio
 import argparse
 import sys
+
+from core_api.config import db_conn
 
 
 parser = argparse.ArgumentParser(description="DB Setup args")

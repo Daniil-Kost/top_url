@@ -9,6 +9,7 @@ DB_PASSWORD = "postgres"
 DB_HOST = "localhost"
 
 URLS_TABLE = "app_url"
-PROFILE_TABLE = "app_user"
+USER_TABLE = "app_user"
+USER_URLS_TABLE = "user_urls"
 URLS_COLUMNS = ("id", "uuid", "url", "title", "domain", "short_url", "slug", "clicks", "create_dttm")
-PROFILE_COLUMNS = ("id", "uuid", "username", "password", "token")
+USER_COLUMNS = ("id", "uuid", "username", "password", "token")

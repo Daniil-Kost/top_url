@@ -4,9 +4,13 @@ from sanic.views import HTTPMethodView
 from sanic import response
 from http import HTTPStatus
 
-from .utils import response_converter, prepare_post_url_data
-from .config import URLS_TABLE, PROFILE_TABLE, URLS_COLUMNS, PROFILE_COLUMNS, db_conn
-from .forms import CreateNewShortUrlForm
+from .config import URLS_TABLE, USER_TABLE, URLS_COLUMNS, USER_COLUMNS, db_conn
+from .forms import CreateNewShortUrlForm, UserRegistrationForm, UserAuthForm
+from .utils import (
+    response_converter,
+    prepare_post_url_data,
+    prepare_user_register_data,
+    check_username_existing,)
 
 
 class UrlsView(HTTPMethodView):
@@ -18,7 +22,9 @@ class UrlsView(HTTPMethodView):
         return response.json(result)
 
     async def post(self, request):
-        form_data, _ = CreateNewShortUrlForm().load(request.json)
+        form_data, errors = CreateNewShortUrlForm().load(request.json)
+        if errors:
+            return response.json(errors, HTTPStatus.BAD_REQUEST)
         data = prepare_post_url_data(form_data)
         try:
             await db_conn.insert(URLS_TABLE, tuple(data.values()),
@@ -44,3 +50,24 @@ class UrlView(HTTPMethodView):
     async def delete(self, request, url_uuid):
         await db_conn.delete_records(URLS_TABLE, conditions_list=[("uuid", "=", url_uuid, None)])
         return response.json({}, HTTPStatus.NO_CONTENT)
+
+
+class RegisterView(HTTPMethodView):
+
+    async def post(self, request):
+        form_data, errors = UserRegistrationForm().load(request.json)
+        if errors:
+            return response.json(errors, HTTPStatus.BAD_REQUEST)
+        if await check_username_existing(form_data["username"]):
+            return response.json({"error": "User with this username already exist"}, HTTPStatus.CONFLICT)
+        data = prepare_user_register_data(form_data)
+        try:
+            await db_conn.insert(USER_TABLE, tuple(data.values()),
+                                 ("uuid", "username", "password", "token"))
+        except psycopg2.ProgrammingError as e:
+            print(e)
+            return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
+
+        query_result = await db_conn.get(USER_TABLE, ["token"], conditions_list=[("uuid", "=", data["uuid"], None)])
+        result = {"token": query_result[0][0]}
+        return response.json(result, HTTPStatus.CREATED)

@@ -1,10 +1,12 @@
 import uuid
+import secrets
 import shortuuid
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from datetime import datetime
-from .config import DEFAULT_DOMAIN
+
+from .config import DEFAULT_DOMAIN, USER_TABLE, db_conn
 
 
 def response_converter(query_result, columns, exclude_fields=None):
@@ -58,3 +60,17 @@ def prepare_post_url_data(request_data):
     data["clicks"] = 0
     data["create_dttm"] = f"{datetime.today()}"
     return data
+
+
+def prepare_user_register_data(request_data):
+    data = {}
+    data["uuid"] = str(uuid.uuid4())
+    data["username"] = request_data["username"]
+    data["password"] = request_data["password"]
+    data["token"] = f"Token {secrets.token_hex(40)}"
+    return data
+
+
+async def check_username_existing(username):
+    result = await db_conn.get(USER_TABLE, ["id"], conditions_list=[("username", "=", username, None)])
+    return True if result else False
