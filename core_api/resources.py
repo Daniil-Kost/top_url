@@ -6,6 +6,7 @@ from http import HTTPStatus
 
 from .utils import response_converter, prepare_post_url_data
 from .config import URLS_TABLE, PROFILE_TABLE, URLS_COLUMNS, PROFILE_COLUMNS, db_conn
+from .forms import CreateNewShortUrlForm
 
 
 class UrlsView(HTTPMethodView):

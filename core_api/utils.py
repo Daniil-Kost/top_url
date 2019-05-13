@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from datetime import datetime
+from .config import DEFAULT_DOMAIN
 
 
 def response_converter(query_result, columns, exclude_fields=None):
@@ -56,4 +57,4 @@ def prepare_post_url_data(request_data):
     data["slug"] = short_uuid_url
     data["clicks"] = 0
     data["create_dttm"] = f"{datetime.today()}"
-    return errors, data
+    return data

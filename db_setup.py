@@ -6,7 +6,6 @@ import asyncio
 async def _check_user_table_existing():
     query = "SELECT to_regclass('public.app_user')"
     result = await db_conn.raw_query(query)
-    print(result)
     if 'app_user' not in result[0]:
         await create_user_table()
     else:
@@ -17,7 +16,6 @@ async def _check_user_table_existing():
 async def _check_url_table_existing():
     query = "SELECT to_regclass('public.app_url')"
     result = await db_conn.raw_query(query)
-    print(result)
     if 'app_url' not in result[0]:
         await create_url_table()
     else:
@@ -28,7 +26,6 @@ async def _check_url_table_existing():
 async def _check_user_urls_table_existing():
     query = "SELECT to_regclass('public.user_urls')"
     result = await db_conn.raw_query(query)
-    print(result)
     if 'user_urls' not in result[0]:
         await create_user_urls_table()
     else:
@@ -112,11 +109,8 @@ async def create_url_table():
     clicks integer NOT NULL,
     create_dttm timestamp with time zone NOT NULL,
     CONSTRAINT app_url_pkey PRIMARY KEY (id),
-    CONSTRAINT user_link FOREIGN KEY (id)
-      REFERENCES public.app_user (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-      CONSTRAINT app_url_short_url_key UNIQUE (short_url),
-      CONSTRAINT app_url_uuid_key UNIQUE (uuid)
+    CONSTRAINT app_url_short_url_key UNIQUE (short_url),
+    CONSTRAINT app_url_uuid_key UNIQUE (uuid)
     )
     WITH (
     OIDS=FALSE
