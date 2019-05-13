@@ -67,7 +67,7 @@ def prepare_user_register_data(request_data):
     data["uuid"] = str(uuid.uuid4())
     data["username"] = request_data["username"]
     data["password"] = request_data["password"]
-    data["token"] = f"Token {secrets.token_hex(40)}"
+    data["token"] = secrets.token_hex(40)
     return data
 
 

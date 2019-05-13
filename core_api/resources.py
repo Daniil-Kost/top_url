@@ -10,7 +10,7 @@ from .utils import (
     response_converter,
     prepare_post_url_data,
     prepare_user_register_data,
-    check_username_existing,)
+    check_username_existing, )
 
 
 class UrlsView(HTTPMethodView):
@@ -71,3 +71,16 @@ class RegisterView(HTTPMethodView):
         query_result = await db_conn.get(USER_TABLE, ["token"], conditions_list=[("uuid", "=", data["uuid"], None)])
         result = {"token": query_result[0][0]}
         return response.json(result, HTTPStatus.CREATED)
+
+
+class AuthView(HTTPMethodView):
+
+    async def post(self, request):
+        form_data, errors = UserAuthForm().load(request.json)
+        if errors:
+            return response.json(errors, HTTPStatus.BAD_REQUEST)
+        query_result = await db_conn.get(USER_TABLE, ["token"],
+                                         conditions_list=[("username", "=", form_data["username"], None),
+                                                          ("password", "=", form_data["password"], "AND")])
+        result = {"token": query_result[0][0]}
+        return response.json(result)
