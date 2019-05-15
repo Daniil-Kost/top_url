@@ -107,7 +107,9 @@ class RedirectView(HTTPMethodView):
 
     async def get(self, request, slug):
         query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("slug", "=", slug, None)])
-        exclude_fields = ("id", "domain", "slug")
-        result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
-        return response.redirect(result[0]["url"])
+        url_for_redirect = query_result[0][2]
+        url_uuid = query_result[0][1]
+        short_url_clicks = query_result[0][7] + 1
+        await db_conn.update(URLS_TABLE, {"clicks": short_url_clicks}, [("uuid", "=", url_uuid, None)])
+        return response.redirect(url_for_redirect)
 
