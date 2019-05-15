@@ -2,9 +2,10 @@ import uuid
 import secrets
 import shortuuid
 from bs4 import BeautifulSoup
+from datetime import datetime
 from urllib.request import urlopen
 from urllib.error import HTTPError
-from datetime import datetime
+
 
 from .config import DEFAULT_DOMAIN, USER_TABLE, db_conn
 

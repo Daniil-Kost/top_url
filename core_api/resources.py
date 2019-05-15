@@ -4,19 +4,31 @@ from sanic.views import HTTPMethodView
 from sanic import response
 from http import HTTPStatus
 
-from .config import URLS_TABLE, USER_TABLE, URLS_COLUMNS, USER_COLUMNS, db_conn
 from .forms import CreateNewShortUrlForm, UserRegistrationForm, UserAuthForm
+from .config import (
+    URLS_TABLE,
+    USER_TABLE,
+    USER_URLS_TABLE,
+    USER_URLS_COLUMNS,
+    URLS_COLUMNS,
+    USER_COLUMNS,
+    db_conn,
+)
 from .utils import (
     response_converter,
     prepare_post_url_data,
     prepare_user_registration_data,
-    check_username_existing, )
+    check_username_existing,
+)
 
 
 class UrlsView(HTTPMethodView):
 
     async def get(self, request):
-        query_result = await db_conn.get_all(URLS_TABLE)
+        all_user_urls = await db_conn.get(USER_URLS_TABLE, ["url_id"],
+                                          conditions_list=[("user_id", "=", request["user"]["id"], None)])
+        user_urls_ids = tuple([i[0] for i in all_user_urls])
+        query_result = await db_conn.raw_query(f"SELECT * FROM {URLS_TABLE} WHERE id IN {user_urls_ids} ")
         exclude_fields = ("id", "domain", "slug")
         result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
         return response.json(result)
@@ -26,17 +38,24 @@ class UrlsView(HTTPMethodView):
         if errors:
             return response.json(errors, HTTPStatus.BAD_REQUEST)
         data = prepare_post_url_data(form_data)
+
         try:
             await db_conn.insert(URLS_TABLE, tuple(data.values()),
                                  ("uuid", "url", "title", "domain", "short_url", "slug", "clicks", "create_dttm"))
         except psycopg2.ProgrammingError as e:
-            print(e)
             return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
 
-        query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("uuid", "=", data["uuid"], None)])
-        exclude_fields = ("id", "domain", "slug")
-        result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
-        return response.json(result[0], HTTPStatus.CREATED)
+        try:
+            query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS,
+                                             conditions_list=[("uuid", "=", data["uuid"], None)])
+            await db_conn.insert(USER_URLS_TABLE, (request["user"]["id"],
+                                                   query_result[0][0]), ("user_id", "url_id"))
+            exclude_fields = ("id", "domain", "slug")
+            result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
+            return response.json(result[0], HTTPStatus.CREATED)
+
+        except psycopg2.ProgrammingError as e:
+            return response.json({"error": e}, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 class UrlView(HTTPMethodView):
@@ -65,11 +84,11 @@ class RegisterView(HTTPMethodView):
             await db_conn.insert(USER_TABLE, tuple(data.values()),
                                  ("uuid", "username", "password", "token"))
         except psycopg2.ProgrammingError as e:
-            print(e)
             return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
 
-        query_result = await db_conn.get(USER_TABLE, ["token"], conditions_list=[("uuid", "=", data["uuid"], None)])
-        result = {"token": query_result[0][0]}
+        query_result = await db_conn.get(USER_TABLE, ["id", "token"],
+                                         conditions_list=[("uuid", "=", data["uuid"], None)])
+        result = {"token": query_result[0][1]}
         return response.json(result, HTTPStatus.CREATED)
 
 
