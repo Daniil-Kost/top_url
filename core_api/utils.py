@@ -50,7 +50,7 @@ def prepare_post_url_data(request_data):
     data = {}
     short_uuid_url = short_url_generator()
     if not request_data.get("short_url") or request_data.get("short_url") == "":
-        request_data["short_url"] = f'{DEFAULT_DOMAIN}/{short_url_generator()}'
+        request_data["short_url"] = f'{DEFAULT_DOMAIN}/{short_uuid_url}'
     title = get_title(request_data["url"])
     data["uuid"] = str(uuid.uuid4())
     data["url"] = request_data["url"]

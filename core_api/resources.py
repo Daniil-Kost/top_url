@@ -101,3 +101,13 @@ class AuthView(HTTPMethodView):
                                                           ("password", "=", form_data["password"], "AND")])
         result = {"token": query_result[0][0]}
         return response.json(result)
+
+
+class RedirectView(HTTPMethodView):
+
+    async def get(self, request, slug):
+        query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("slug", "=", slug, None)])
+        exclude_fields = ("id", "domain", "slug")
+        result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
+        return response.redirect(result[0]["url"])
+
