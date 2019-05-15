@@ -30,7 +30,7 @@ if args.clear:
             await db_conn.clear_table("user_urls, app_url, app_user")
             print("All tables successfully cleared!")
         else:
-            print("Cannot clear all tables - some tables not defined")
+            print("Cannot clear all tables - some tables are not defined")
         sys.exit()
     asyncio.run(clear_tables())
 
@@ -91,7 +91,7 @@ async def create_user_table():
     await db_conn.raw_query(user_seq_query)
     await db_conn.raw_query(user_id_query)
 
-    print("User table created!")
+    print("app_user table successfully created!")
 
 
 # Create user urls table:
@@ -124,7 +124,7 @@ async def create_user_urls_table():
     await db_conn.raw_query(user_urls_seq_query)
     await db_conn.raw_query(user_urls_id_query)
 
-    print("User Urls table created!")
+    print("user_urls table successfully created!")
 
 
 # Create url table:
@@ -172,7 +172,7 @@ async def create_url_table():
     await db_conn.raw_query(index_short_url_query)
     await db_conn.raw_query(index_slug_query)
 
-    print("Url table created!")
+    print("app_url table successfully created!")
 
 
 def setup():
