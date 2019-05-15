@@ -1,5 +1,5 @@
 import psycopg2
-from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS, ID
+from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response
 from http import HTTPStatus
@@ -9,9 +9,7 @@ from .config import (
     URLS_TABLE,
     USER_TABLE,
     USER_URLS_TABLE,
-    USER_URLS_COLUMNS,
     URLS_COLUMNS,
-    USER_COLUMNS,
     db_conn,
 )
 from .utils import (

@@ -155,14 +155,12 @@ async def create_url_table():
     id_query = "ALTER TABLE app_url alter column id set default nextval('app_url_id_seq')"
 
     index_short_url_query = """
-    CREATE INDEX app_url_short_url_ff5b03fe_like 
-    ON public.app_url 
+    CREATE INDEX app_url_short_url_ff5b03fe_like ON public.app_url
     USING btree (short_url COLLATE pg_catalog."default" varchar_pattern_ops)
     """
 
     index_slug_query = """
-    CREATE INDEX app_url_url_slug_51d6effc_like 
-    ON public.app_url 
+    CREATE INDEX app_url_url_slug_51d6effc_like ON public.app_url
     USING btree (slug COLLATE pg_catalog."default" varchar_pattern_ops);
     """
 

@@ -1,4 +1,3 @@
-from lemkpg import AsyncLemkPgApi
 from lemkpg.constants import GET_ALL_COLUMNS
 from sanic import Sanic
 from sanic.exceptions import Unauthorized
