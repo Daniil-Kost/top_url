@@ -8,6 +8,7 @@ from core_api.resources import UrlsView, UrlView, RegisterView, AuthView
 from core_api.config import USER_TABLE, USER_COLUMNS, db_conn
 from core_api.utils import response_converter
 
+
 app = Sanic("app")
 
 
