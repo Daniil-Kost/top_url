@@ -10,7 +10,7 @@ from .config import (
     USER_TABLE,
     USER_URLS_TABLE,
     URLS_COLUMNS,
-    db_conn,
+test_db_conn
 )
 from .utils import (
     response_converter,
@@ -23,6 +23,7 @@ from .utils import (
 class UrlsView(HTTPMethodView):
 
     async def get(self, request):
+        db_conn = request["db_conn"]
         all_user_urls = await db_conn.get(USER_URLS_TABLE, ["url_id"],
                                           conditions_list=[("user_id", "=", request["user"]["id"], None)])
         user_urls_ids = tuple([i[0] for i in all_user_urls])
@@ -32,6 +33,7 @@ class UrlsView(HTTPMethodView):
         return response.json(result)
 
     async def post(self, request):
+        db_conn = request["db_conn"]
         form_data, errors = CreateNewShortUrlForm().load(request.json)
         if errors:
             return response.json(errors, HTTPStatus.BAD_REQUEST)
@@ -59,6 +61,7 @@ class UrlsView(HTTPMethodView):
 class UrlView(HTTPMethodView):
 
     async def get(self, request, url_uuid):
+        db_conn = request["db_conn"]
         query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("uuid", "=", url_uuid, None)])
         exclude_fields = ("id", "domain", "slug")
         result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
@@ -72,6 +75,7 @@ class UrlView(HTTPMethodView):
 class RegisterView(HTTPMethodView):
 
     async def post(self, request):
+        db_conn = request["db_conn"]
         form_data, errors = UserRegistrationForm().load(request.json)
         if errors:
             return response.json(errors, HTTPStatus.BAD_REQUEST)
@@ -93,6 +97,7 @@ class RegisterView(HTTPMethodView):
 class AuthView(HTTPMethodView):
 
     async def post(self, request):
+        db_conn = request["db_conn"]
         form_data, errors = UserAuthForm().load(request.json)
         if errors:
             return response.json(errors, HTTPStatus.BAD_REQUEST)
@@ -106,6 +111,7 @@ class AuthView(HTTPMethodView):
 class RedirectView(HTTPMethodView):
 
     async def get(self, request, slug):
+        db_conn = request["db_conn"] or request.headers
         query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("slug", "=", slug, None)])
         url_for_redirect = query_result[0][2]
         url_uuid = query_result[0][1]
@@ -113,3 +119,18 @@ class RedirectView(HTTPMethodView):
         await db_conn.update(URLS_TABLE, {"clicks": short_url_clicks}, [("uuid", "=", url_uuid, None)])
         return response.redirect(url_for_redirect)
 
+
+def get_db_conn(request):
+    db_conn = request.get("db_conn") if request.get("db_conn") else test_db_conn
+    return db_conn
+
+
+class DemoView(HTTPMethodView):
+
+    async def get(self, request):
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        print(request.items())
+        db_conn = get_db_conn(request)
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        print(db_conn.dsn)
+        return response.json({"Text": db_conn.dsn})

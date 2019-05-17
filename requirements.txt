@@ -1,0 +1,12 @@
+aiopg
+asynctest
+aiohttp
+beautifulsoup4
+bs4
+sanic
+shortuuid
+lemkpg
+marshmallow
+psycopg2
+psycopg2-binary
+pytest
