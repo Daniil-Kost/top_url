@@ -5,7 +5,7 @@ from core_api.config import db_conn, test_db_conn
 from application import app, create_api
 import os
 import contextvars
-
+from resources_tests import demo
 
 class TestApiResources(TestCase):
 
@@ -19,6 +19,7 @@ class TestApiResources(TestCase):
         self.db.set("default_context")
 
     def test_demo(self):
+        demo()
         self.add_test_db_ctx()
         resp = app.test_client.get(
             f'/', gather_request=False)
