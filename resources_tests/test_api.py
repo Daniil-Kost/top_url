@@ -4,20 +4,26 @@ import unittest
 from core_api.config import db_conn, test_db_conn
 from application import app, create_api
 import os
-
+import contextvars
 
 
 class TestApiResources(TestCase):
 
     create_api()
+    db = contextvars.ContextVar("db")
 
-    def test_get_urls(self):
+    def add_test_db_ctx(self):
+        self.db.set("test_context")
 
-        req, resp = app.test_client.get(
-            f'/')
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print(__name__)
+    def add_default_db_ctx(self):
+        self.db.set("default_context")
+
+    def test_demo(self):
+        self.add_test_db_ctx()
+        resp = app.test_client.get(
+            f'/', gather_request=False)
         self.assertEqual(resp.status, 200)
+        self.add_default_db_ctx()
 
 
 if __name__ == "__main__":

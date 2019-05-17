@@ -111,7 +111,7 @@ class AuthView(HTTPMethodView):
 class RedirectView(HTTPMethodView):
 
     async def get(self, request, slug):
-        db_conn = request["db_conn"] or request.headers
+        db_conn = request["db_conn"]
         query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("slug", "=", slug, None)])
         url_for_redirect = query_result[0][2]
         url_uuid = query_result[0][1]
@@ -120,17 +120,10 @@ class RedirectView(HTTPMethodView):
         return response.redirect(url_for_redirect)
 
 
-def get_db_conn(request):
-    db_conn = request.get("db_conn") if request.get("db_conn") else test_db_conn
-    return db_conn
-
-
 class DemoView(HTTPMethodView):
 
     async def get(self, request):
-        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        print(request.items())
-        db_conn = get_db_conn(request)
+        db_conn = request["db_conn"]
         print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         print(db_conn.dsn)
         return response.json({"Text": db_conn.dsn})
