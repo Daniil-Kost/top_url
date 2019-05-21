@@ -14,7 +14,7 @@ async def load_fixtures():
     for data in ALL_URLS_DATA:
         await test_db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
     # Load user data
-        await test_db_conn.insert(USER_TABLE, tuple(USER_DATA.values()), tuple(USER_DATA.keys()))
+    await test_db_conn.insert(USER_TABLE, tuple(USER_DATA.values()), tuple(USER_DATA.keys()))
 
 
 class BaseTestCase(unittest.TestCase):
