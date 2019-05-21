@@ -39,8 +39,7 @@ class UrlsView(HTTPMethodView):
         data = prepare_post_url_data(form_data)
 
         try:
-            await db_conn.insert(URLS_TABLE, tuple(data.values()),
-                                 ("uuid", "url", "title", "domain", "short_url", "slug", "clicks", "create_dttm"))
+            await db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
         except psycopg2.ProgrammingError as e:
             return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
 
@@ -83,8 +82,7 @@ class RegisterView(HTTPMethodView):
             return response.json({"error": "User with this username already exists"}, HTTPStatus.CONFLICT)
         data = prepare_user_registration_data(form_data)
         try:
-            await db_conn.insert(USER_TABLE, tuple(data.values()),
-                                 ("uuid", "username", "password", "token"))
+            await db_conn.insert(USER_TABLE, tuple(data.values()), tuple(data.keys()))
         except psycopg2.ProgrammingError as e:
             return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
 
