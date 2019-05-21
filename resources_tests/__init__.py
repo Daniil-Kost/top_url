@@ -1,10 +1,20 @@
 import psycopg2
 import unittest
 import contextvars
+import asyncio
 
 from application import create_api
 from db_setup import setup
-from core_api.config import test_db_conn
+from core_api.config import test_db_conn, URLS_TABLE, USER_TABLE
+from .fixtures import ALL_URLS_DATA, USER_DATA
+
+
+async def load_fixtures():
+    # Load urls data
+    for data in ALL_URLS_DATA:
+        await test_db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
+    # Load user data
+        await test_db_conn.insert(USER_TABLE, tuple(USER_DATA.values()), tuple(USER_DATA.keys()))
 
 
 class BaseTestCase(unittest.TestCase):
@@ -12,10 +22,12 @@ class BaseTestCase(unittest.TestCase):
     create_api()
     db_context = contextvars.ContextVar("db_context")
 
-    def add_test_db_to_ctx(self):
+    headers = {"Authorization": f"Token {USER_DATA['token']}", "Content-Type": "application/json"}
+
+    def _add_test_db_to_ctx(self):
         self.db_context.set("test_context")
 
-    def add_default_db_to_ctx(self):
+    def _add_default_db_to_ctx(self):
         self.db_context.set("default_context")
 
     def setUp(self):
@@ -24,8 +36,9 @@ class BaseTestCase(unittest.TestCase):
         with conn.cursor() as cur:
             cur.execute('CREATE DATABASE urls_test')
         conn.close()
-        self.add_test_db_to_ctx()
+        self._add_test_db_to_ctx()
         setup(db_connection=test_db_conn)
+        asyncio.run(load_fixtures())
         print("!"*50)
         print("Test DB successfully created!")
 
@@ -35,7 +48,7 @@ class BaseTestCase(unittest.TestCase):
         with conn.cursor() as cur:
             cur.execute('DROP DATABASE IF EXISTS urls_test')
         conn.close()
-        self.add_default_db_to_ctx()
+        self._add_default_db_to_ctx()
         print("!"*50)
         print("Test DB successfully deleted!")
 
