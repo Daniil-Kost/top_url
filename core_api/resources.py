@@ -9,8 +9,7 @@ from .config import (
     URLS_TABLE,
     USER_TABLE,
     USER_URLS_TABLE,
-    URLS_COLUMNS,
-test_db_conn
+    URLS_COLUMNS
 )
 from .utils import (
     response_converter,

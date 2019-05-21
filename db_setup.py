@@ -2,37 +2,47 @@ import asyncio
 import argparse
 import sys
 
+from core_api.config import db_conn as default_db_conn
 
-from core_api.config import db_conn
+
+db_conn = None
 
 parser = argparse.ArgumentParser(description="DB Setup args")
 
 parser.add_argument("-d", "--delete", action="store_true")
 parser.add_argument("-c", "--clear", action="store_true")
-args = parser.parse_args()
 
-if args.delete:
-    async def delete_tables():
-        await db_conn.delete_table("public.user_urls")
-        await db_conn.delete_table("public.app_url")
-        await db_conn.delete_table("public.app_user")
-        print("All tables successfully deleted!")
-        sys.exit()
-    asyncio.run(delete_tables())
+try:
+    args = parser.parse_args()
+except SystemExit:
+    args = None
 
-if args.clear:
-    async def clear_tables():
-        exists_user_urls = await db_conn.raw_query("SELECT to_regclass('public.user_urls')")
-        exists_app_url = await db_conn.raw_query("SELECT to_regclass('public.app_url')")
-        exists_app_user = await db_conn.raw_query("SELECT to_regclass('public.app_user')")
-        exists_list = [exists_user_urls[0][0], exists_app_url[0][0], exists_app_user[0][0]]
-        if "user_urls" in exists_list and "app_url" in exists_list and "app_user" in exists_list:
-            await db_conn.clear_table("user_urls, app_url, app_user")
-            print("All tables successfully cleared!")
-        else:
-            print("Cannot clear all tables - some tables are not defined")
-        sys.exit()
-    asyncio.run(clear_tables())
+try:
+    if args.delete:
+        async def delete_tables():
+            await db_conn.delete_table("public.user_urls")
+            await db_conn.delete_table("public.app_url")
+            await db_conn.delete_table("public.app_user")
+            print("All tables successfully deleted!")
+            sys.exit()
+        asyncio.run(delete_tables())
+
+    if args.clear:
+        async def clear_tables():
+            exists_user_urls = await db_conn.raw_query("SELECT to_regclass('public.user_urls')")
+            exists_app_url = await db_conn.raw_query("SELECT to_regclass('public.app_url')")
+            exists_app_user = await db_conn.raw_query("SELECT to_regclass('public.app_user')")
+            exists_list = [exists_user_urls[0][0], exists_app_url[0][0], exists_app_user[0][0]]
+            if "user_urls" in exists_list and "app_url" in exists_list and "app_user" in exists_list:
+                await db_conn.clear_table("user_urls, app_url, app_user")
+                print("All tables successfully cleared!")
+            else:
+                print("Cannot clear all tables - some tables are not defined")
+            sys.exit()
+        asyncio.run(clear_tables())
+
+except AttributeError:
+    pass
 
 
 # check existing users tables (public.app_user')
@@ -173,7 +183,9 @@ async def create_url_table():
     print("app_url table successfully created!")
 
 
-def setup():
+def setup(db_connection=default_db_conn):
+    global db_conn
+    db_conn = db_connection
     asyncio.run(check_existing_tables())
 
 
