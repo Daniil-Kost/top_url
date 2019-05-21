@@ -3,7 +3,7 @@ from sanic import Sanic
 from lemkpg.constants import GET_ALL_COLUMNS
 from sanic.exceptions import Unauthorized
 
-from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView, DemoView
+from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView
 from core_api.config import USER_TABLE, USER_COLUMNS, db_conn, test_db_conn
 from core_api.utils import response_converter
 import contextvars
@@ -47,7 +47,5 @@ def create_api():
     api_v1.add_route(RegisterView.as_view(), '/register', strict_slashes=False)
     api_v1.add_route(AuthView.as_view(), '/auth', strict_slashes=False)
     app.add_route(RedirectView.as_view(), '/<slug>', strict_slashes=False)
-
-    app.add_route(DemoView.as_view(), "/", strict_slashes=False)
 
     app.blueprint(api_v1)

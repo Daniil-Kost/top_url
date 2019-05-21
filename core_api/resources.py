@@ -67,6 +67,7 @@ class UrlView(HTTPMethodView):
         return response.json(result[0])
 
     async def delete(self, request, url_uuid):
+        db_conn = request["db_conn"]
         await db_conn.delete_records(URLS_TABLE, conditions_list=[("uuid", "=", url_uuid, None)])
         return response.json({}, HTTPStatus.NO_CONTENT)
 
@@ -117,12 +118,3 @@ class RedirectView(HTTPMethodView):
         short_url_clicks = query_result[0][7] + 1
         await db_conn.update(URLS_TABLE, {"clicks": short_url_clicks}, [("uuid", "=", url_uuid, None)])
         return response.redirect(url_for_redirect)
-
-
-class DemoView(HTTPMethodView):
-
-    async def get(self, request):
-        db_conn = request["db_conn"]
-        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        print(db_conn.dsn)
-        return response.json({"Text": db_conn.dsn})
