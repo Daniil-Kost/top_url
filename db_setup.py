@@ -12,11 +12,13 @@ parser = argparse.ArgumentParser(description="DB Setup args")
 parser.add_argument("-d", "--delete", action="store_true")
 parser.add_argument("-c", "--clear", action="store_true")
 
+# Add exception handler for run some of code below in unittests
 try:
     args = parser.parse_args()
 except SystemExit:
     args = None
 
+# Add exception handler for run some code below in unittests
 try:
     if args.delete:
         async def delete_tables():
@@ -45,7 +47,7 @@ except AttributeError:
     pass
 
 
-# check existing users tables (public.app_user')
+# check existing users tables (public.app_user') and create it if not exists
 async def _check_user_table_existing():
     query = "SELECT to_regclass('public.app_user')"
     result = await db_conn.raw_query(query)
@@ -55,7 +57,7 @@ async def _check_user_table_existing():
         print(f"User table: 'app_user' exists in DB")
 
 
-# check existing url table (public.app_url')
+# check existing url table (public.app_url') and create it if not exists
 async def _check_url_table_existing():
     query = "SELECT to_regclass('public.app_url')"
     result = await db_conn.raw_query(query)
@@ -65,7 +67,7 @@ async def _check_url_table_existing():
         print(f"Url table: 'app_url' exists in DB")
 
 
-# check existing url table (public.user_urls')
+# check existing url table (public.user_urls') and create it if not exists
 async def _check_user_urls_table_existing():
     query = "SELECT to_regclass('public.user_urls')"
     result = await db_conn.raw_query(query)
@@ -75,6 +77,7 @@ async def _check_user_urls_table_existing():
         print(f"User Urls table: 'user_urls' exists in DB")
 
 
+# check existing of all tables
 async def check_existing_tables():
     await _check_user_table_existing()
     await _check_url_table_existing()
@@ -184,6 +187,7 @@ async def create_url_table():
 
 
 def setup(db_connection=default_db_conn):
+    # we need argument 'db_connection' and global variable 'db_conn' for usage in unittests
     global db_conn
     db_conn = db_connection
     asyncio.run(check_existing_tables())

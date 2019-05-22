@@ -10,6 +10,7 @@ from urllib.error import HTTPError
 from .config import DEFAULT_DOMAIN, USER_TABLE, db_conn
 
 
+# convert response to dict
 def response_converter(query_result, columns, exclude_fields=None):
     result = []
     for records in query_result:

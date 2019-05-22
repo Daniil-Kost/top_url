@@ -1,7 +1,7 @@
+import asyncio
+import contextvars
 import psycopg2
 import unittest
-import contextvars
-import asyncio
 
 from application import create_api
 from db_setup import setup
@@ -17,6 +17,7 @@ async def load_fixtures():
     await test_db_conn.insert(USER_TABLE, tuple(USER_DATA.values()), tuple(USER_DATA.keys()))
     # Load user urls data
     await test_db_conn.insert(USER_URLS_TABLE, tuple(USER_URLS_DATA.values()), tuple(USER_URLS_DATA.keys()))
+    print("Fixtures successfully loaded!")
 
 
 class BaseTestCase(unittest.TestCase):
@@ -38,9 +39,9 @@ class BaseTestCase(unittest.TestCase):
         with conn.cursor() as cur:
             cur.execute('CREATE DATABASE urls_test')
         conn.close()
-        print("!"*50)
         print("Test DB successfully created!")
         self._add_test_db_to_ctx()
+        # run setup func for create all required tables in test db
         setup(db_connection=test_db_conn)
         asyncio.run(load_fixtures())
 
@@ -50,7 +51,6 @@ class BaseTestCase(unittest.TestCase):
         with conn.cursor() as cur:
             cur.execute('DROP DATABASE IF EXISTS urls_test')
         conn.close()
-        print("!"*50)
         print("Test DB successfully deleted!")
         self._add_default_db_to_ctx()
 
