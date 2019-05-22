@@ -33,9 +33,7 @@ ALL_URLS_DATA = [
     }
 ]
 
-
-USER_URLS_DATA = [ALL_URLS_DATA[2]]
-
+TEST_USER_URLS = ALL_URLS_DATA[2]
 
 USER_DATA = {
     "uuid": "16181b10-09cd-4cbe-bfd4-3e0312ed4689",
@@ -43,5 +41,7 @@ USER_DATA = {
     "password": "b167c684bbe6131c407fb118b99ef707",
     "token": "85d70ea13a05f6611ea0ccd69674dd81337accd3b6f186da95df9e120fa32acde75ca64faaabb230"
 }
+
+USER_URLS_DATA = {"user_id": 1, "url_id": 3}
 
 

@@ -25,8 +25,8 @@ class UrlsView(HTTPMethodView):
         db_conn = request["db_conn"]
         all_user_urls = await db_conn.get(USER_URLS_TABLE, ["url_id"],
                                           conditions_list=[("user_id", "=", request["user"]["id"], None)])
-        user_urls_ids = tuple([i[0] for i in all_user_urls])
-        query_result = await db_conn.raw_query(f"SELECT * FROM {URLS_TABLE} WHERE id IN {user_urls_ids} ")
+        user_urls_ids = [str(i[0]) for i in all_user_urls]
+        query_result = await db_conn.raw_query(f"SELECT * FROM {URLS_TABLE} WHERE id IN ({''.join(user_urls_ids)}) ")
         exclude_fields = ("id", "domain", "slug")
         result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
         return response.json(result)

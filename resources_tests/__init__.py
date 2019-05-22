@@ -5,8 +5,8 @@ import asyncio
 
 from application import create_api
 from db_setup import setup
-from core_api.config import test_db_conn, URLS_TABLE, USER_TABLE
-from .fixtures import ALL_URLS_DATA, USER_DATA
+from core_api.config import test_db_conn, URLS_TABLE, USER_TABLE, USER_URLS_TABLE
+from .fixtures import ALL_URLS_DATA, USER_DATA, USER_URLS_DATA, TEST_USER_URLS
 
 
 async def load_fixtures():
@@ -15,6 +15,8 @@ async def load_fixtures():
         await test_db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
     # Load user data
     await test_db_conn.insert(USER_TABLE, tuple(USER_DATA.values()), tuple(USER_DATA.keys()))
+    # Load user urls data
+    await test_db_conn.insert(USER_URLS_TABLE, tuple(USER_URLS_DATA.values()), tuple(USER_URLS_DATA.keys()))
 
 
 class BaseTestCase(unittest.TestCase):
@@ -36,11 +38,11 @@ class BaseTestCase(unittest.TestCase):
         with conn.cursor() as cur:
             cur.execute('CREATE DATABASE urls_test')
         conn.close()
+        print("!"*50)
+        print("Test DB successfully created!")
         self._add_test_db_to_ctx()
         setup(db_connection=test_db_conn)
         asyncio.run(load_fixtures())
-        print("!"*50)
-        print("Test DB successfully created!")
 
     def tearDown(self):
         conn = psycopg2.connect(dbname="postgres", user="postgres", password="postgres", host="localhost")
@@ -48,7 +50,7 @@ class BaseTestCase(unittest.TestCase):
         with conn.cursor() as cur:
             cur.execute('DROP DATABASE IF EXISTS urls_test')
         conn.close()
-        self._add_default_db_to_ctx()
         print("!"*50)
         print("Test DB successfully deleted!")
+        self._add_default_db_to_ctx()
 
