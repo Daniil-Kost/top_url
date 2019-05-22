@@ -6,7 +6,7 @@ import unittest
 from application import create_api
 from db_setup import setup
 from core_api.config import test_db_conn, URLS_TABLE, USER_TABLE, USER_URLS_TABLE
-from .fixtures import ALL_URLS_DATA, USER_DATA, USER_URLS_DATA, TEST_USER_URLS
+from .fixtures import ALL_URLS_DATA, USER_DATA, USER_URLS_DATA
 
 
 async def load_fixtures():

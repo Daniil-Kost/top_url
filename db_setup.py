@@ -187,7 +187,7 @@ async def create_url_table():
 
 
 def setup(db_connection=default_db_conn):
-    # we need argument 'db_connection' and global variable 'db_conn' for usage in unittests
+    # we need argument 'db_connection' and global variable 'db_conn' for usage setup() func in unittests
     global db_conn
     db_conn = db_connection
     asyncio.run(check_existing_tables())

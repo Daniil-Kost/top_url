@@ -1,5 +1,3 @@
-
-
 ALL_URLS_DATA = [
     {
         "uuid": "e138e75b-a5bd-4568-a841-f8a3f018e853",
@@ -13,8 +11,8 @@ ALL_URLS_DATA = [
     },
     {
         "uuid": "d68c964a-a355-4344-b4f0-3cf288040582",
-        "url": "https://stackoverflow.com/questions/2444899/insert-or-update-on-table-violates-foreign-key-constraint",
-        "title": "insert or update on table violates foreign key constraint",
+        "url": "https://pypi.org/project/lemkpg/",
+        "title": "",
         "domain": "http://localhost:8000",
         "short_url": "http://localhost:8000/W4DEm4Nd",
         "slug": "W4DEm4Nd",
@@ -33,8 +31,6 @@ ALL_URLS_DATA = [
     }
 ]
 
-TEST_USER_URLS = ALL_URLS_DATA[2]
-
 USER_DATA = {
     "uuid": "16181b10-09cd-4cbe-bfd4-3e0312ed4689",
     "username": "test",
@@ -43,5 +39,3 @@ USER_DATA = {
 }
 
 USER_URLS_DATA = {"user_id": 1, "url_id": 3}
-
-
