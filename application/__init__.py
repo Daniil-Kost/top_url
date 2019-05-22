@@ -34,7 +34,7 @@ async def check_authorization_and_add_user_to_request(request):
         result = await request["db_conn"].get(USER_TABLE, GET_ALL_COLUMNS,
                                               conditions_list=[("token", "=", request.token, None)])
         if not result and request.path not in registration_and_auth_paths and api_path in request.path:
-            raise Unauthorized("Authorization with Token should be defined in request headers")
+            raise Unauthorized("Authorization with valid Token should be defined in request headers")
         if result and request.path not in registration_and_auth_paths and api_path in request.path:
             user = response_converter(result, USER_COLUMNS, ("password",))[0]
             request["user"] = user

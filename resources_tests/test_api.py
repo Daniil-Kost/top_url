@@ -11,9 +11,25 @@ class TestApiResources(BaseTestCase):
         correct_json_output = deepcopy(TEST_USER_URLS)
         correct_json_output.pop("domain")
         correct_json_output.pop("slug")
+
         response = app.test_client.get(
             f'/api/v1/urls', headers=self.headers, gather_request=False)
+
         self.assertEqual(response.status, 200)
         self.assertEqual(response.json[0], correct_json_output)
         self.assertEqual(len(response.json), 1)
         self.assertEqual(type(response.json), list)
+
+    def test_urls_resource_failed_without_token(self):
+        response = app.test_client.get(
+            f'/api/v1/urls', headers={}, gather_request=False)
+
+        self.assertEqual(response.status, 401)
+        self.assertEqual(response.text, 'Error: Authorization should be defined in request headers')
+
+    def test_urls_resource_failed_with_invalid_token(self):
+        response = app.test_client.get(
+            f'/api/v1/urls', headers={"Authorization": f"Token 844895y45yrrtgrgrgree"}, gather_request=False)
+
+        self.assertEqual(response.status, 401)
+        self.assertEqual(response.text, 'Error: Authorization with valid Token should be defined in request headers')
