@@ -23,15 +23,15 @@ async def load_fixtures():
 class BaseTestCase(unittest.TestCase):
 
     create_api()
-    db_context = contextvars.ContextVar("db_context")
+    context = contextvars.ContextVar("db_context")
 
     headers = {"Authorization": f"Token {USER_DATA['token']}", "Content-Type": "application/json"}
 
-    def _add_test_db_to_ctx(self):
-        self.db_context.set("test_context")
+    def _set_test_ctx(self):
+        self.context.set("test_context")
 
-    def _add_default_db_to_ctx(self):
-        self.db_context.set("default_context")
+    def _set_default_ctx(self):
+        self.context.set("default_context")
 
     def setUp(self):
         conn = psycopg2.connect(dbname="postgres", user="postgres", password="postgres", host="localhost")
@@ -40,7 +40,7 @@ class BaseTestCase(unittest.TestCase):
             cur.execute('CREATE DATABASE urls_test')
         conn.close()
         print("Test DB successfully created!")
-        self._add_test_db_to_ctx()
+        self._set_test_ctx()
         # run setup func for create all required tables in test db
         setup(db_connection=test_db_conn)
         asyncio.run(load_fixtures())
@@ -52,5 +52,5 @@ class BaseTestCase(unittest.TestCase):
             cur.execute('DROP DATABASE IF EXISTS urls_test')
         conn.close()
         print("Test DB successfully deleted!")
-        self._add_default_db_to_ctx()
+        self._set_default_ctx()
 

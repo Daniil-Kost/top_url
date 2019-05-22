@@ -13,7 +13,7 @@ app = Sanic("app")
 
 
 @app.middleware('request')
-async def check_run_or_test_and_return_db_conn(request):
+async def check_run_or_unittest_and_return_db_conn(request):
     ctx = contextvars.copy_context()
     context_values = list(ctx.values())
     if "default_context" in context_values:
