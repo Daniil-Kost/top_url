@@ -116,4 +116,26 @@ class TestApiResources(BaseTestCase):
         self.assertEqual(response.status, 404)
         self.assertEqual(response.json, NOT_FOUND_URL_ERROR)
 
+    def test_delete_url_success(self):
+        uuid = TEST_USER_URL["uuid"]
+
+        response = app.test_client.delete(
+            f'/api/v1/urls/{uuid}', headers=self.headers, gather_request=False)
+
+        get_response = app.test_client.get(
+            f'/api/v1/urls/{uuid}', headers=self.headers, gather_request=False)
+
+        self.assertEqual(response.status, 204)
+        self.assertEqual(get_response.status, 404)
+        self.assertEqual(get_response.json, NOT_FOUND_URL_ERROR)
+
+    def test_delete_failed_because_url_not_in_user_urls(self):
+        uuid = ANOTHER_USER_URL["uuid"]
+
+        response = app.test_client.delete(
+            f'/api/v1/urls/{uuid}', headers=self.headers, gather_request=False)
+
+        self.assertEqual(response.status, 404)
+        self.assertEqual(response.json, NOT_FOUND_URL_ERROR)
+
 

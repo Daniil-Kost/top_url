@@ -75,6 +75,14 @@ class UrlView(HTTPMethodView):
 
     async def delete(self, request, url_uuid):
         db_conn = request["db_conn"]
+        query = f"""SELECT * FROM {URLS_TABLE} FULL JOIN {USER_URLS_TABLE} 
+                ON {USER_URLS_TABLE}.user_id = {request["user"]["id"]}
+                AND {URLS_TABLE}.uuid = '{url_uuid}' WHERE {URLS_TABLE}.id IN ({USER_URLS_TABLE}.url_id)"""
+        query_result = await db_conn.raw_query(query)
+
+        if not query_result:
+            return response.json({"error": "This url not found for this user"}, HTTPStatus.NOT_FOUND)
+
         await db_conn.delete_records(URLS_TABLE, conditions_list=[("uuid", "=", url_uuid, None)])
         return response.json({}, HTTPStatus.NO_CONTENT)
 
