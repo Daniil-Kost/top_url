@@ -1,4 +1,5 @@
 import psycopg2
+import uuid
 from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response
@@ -26,7 +27,7 @@ class UrlsView(HTTPMethodView):
         all_user_urls = await db_conn.get(USER_URLS_TABLE, ["url_id"],
                                           conditions_list=[("user_id", "=", request["user"]["id"], None)])
         user_urls_ids = [str(i[0]) for i in all_user_urls]
-        query_result = await db_conn.raw_query(f"SELECT * FROM {URLS_TABLE} WHERE id IN ({''.join(user_urls_ids)}) ")
+        query_result = await db_conn.raw_query(f"SELECT * FROM {URLS_TABLE} WHERE id IN ({','.join(user_urls_ids)}) ")
         exclude_fields = ("id", "domain", "slug")
         result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
         return response.json(result)
@@ -60,7 +61,14 @@ class UrlView(HTTPMethodView):
 
     async def get(self, request, url_uuid):
         db_conn = request["db_conn"]
-        query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS, conditions_list=[("uuid", "=", url_uuid, None)])
+        query = f"""SELECT * FROM {URLS_TABLE} FULL JOIN {USER_URLS_TABLE} 
+        ON {USER_URLS_TABLE}.user_id = {request["user"]["id"]}
+        AND {URLS_TABLE}.uuid = '{url_uuid}' WHERE {URLS_TABLE}.id IN ({USER_URLS_TABLE}.url_id)"""
+        query_result = await db_conn.raw_query(query)
+
+        if not query_result:
+            return response.json({"error": "This url not found for this user"}, HTTPStatus.NOT_FOUND)
+
         exclude_fields = ("id", "domain", "slug")
         result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
         return response.json(result[0])
