@@ -2,7 +2,7 @@ import json
 from copy import deepcopy
 
 from application import app
-from resources_tests import BaseTestCase
+from tests import BaseTestCase
 from .mock_for_tests import (
     TEST_USER_URL,
     URL_POST_DATA,

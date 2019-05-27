@@ -1,5 +1,5 @@
 from application import app
-from resources_tests import BaseTestCase, get_test_query_result
+from tests import BaseTestCase, get_test_query_result
 from .mock_for_tests import TEST_USER_URL
 from core_api.config import URLS_TABLE
 

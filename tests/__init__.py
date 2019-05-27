@@ -49,7 +49,7 @@ class BaseTestCase(unittest.TestCase):
         conn.close()
         print("Test DB successfully created!")
         self._set_test_ctx()
-        # run setup func for create all required tables in test db
+        # run setup() func for create all required tables in test db
         setup(db_connection=test_db_conn)
         asyncio.run(load_fixtures())
 
@@ -61,4 +61,3 @@ class BaseTestCase(unittest.TestCase):
         conn.close()
         print("Test DB successfully deleted!")
         self._set_default_ctx()
-
