@@ -9,6 +9,14 @@ from core_api.config import test_db_conn, URLS_TABLE, USER_TABLE, USER_URLS_TABL
 from .fixtures import ALL_URLS_DATA, USER_DATA, USER_URLS_DATA
 
 
+def get_test_query_result(query):
+    async def execute_query():
+        query_result = await test_db_conn.raw_query(query)
+        return query_result
+    result = asyncio.run(execute_query())
+    return result
+
+
 async def load_fixtures():
     # Load urls data
     for data in ALL_URLS_DATA:
