@@ -73,3 +73,17 @@ REGISTRATION_REQUIRED_FIELDS_ERROR = {
 USERNAME_EXISTS_ERROR = {"error": "User with this username already exists"}
 
 EMPTY_POST_REQUEST_ERROR = "Error: POST request data should not be None"
+
+
+AUTH_USER_CORRECT_DATA = {"username": "test",
+                          "password": "Test2018"}
+
+
+AUTH_USER_REQUIRED_FIELDS_ERROR = {
+    "password": [
+        "Missing data for required field."
+    ],
+    "username": [
+        "Missing data for required field."
+    ]
+}

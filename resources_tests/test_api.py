@@ -21,6 +21,8 @@ from .mock_for_tests import (
     PASSWORD_LENGTH_ERROR,
     REGISTRATION_REQUIRED_FIELDS_ERROR,
     EMPTY_POST_REQUEST_ERROR,
+    AUTH_USER_CORRECT_DATA,
+    AUTH_USER_REQUIRED_FIELDS_ERROR
 )
 
 
@@ -211,3 +213,21 @@ class TestApiResources(BaseTestCase):
 
         self.assertEqual(response.status, 400)
         self.assertEqual(response.text, EMPTY_POST_REQUEST_ERROR)
+
+    def test_auth_user_success(self):
+        data = json.dumps(AUTH_USER_CORRECT_DATA)
+        response = app.test_client.post(
+            '/api/v1/auth', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 200)
+        self.assertEqual(type(response.json), dict)
+        self.assertIn("token", response.json)
+
+    def test_auth_user_failed_with_required_fields_validation_error(self):
+        data = json.dumps({})
+        response = app.test_client.post(
+            '/api/v1/auth', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(type(response.json), dict)
+        self.assertEqual(response.json, AUTH_USER_REQUIRED_FIELDS_ERROR)
