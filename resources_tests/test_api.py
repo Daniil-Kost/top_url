@@ -12,6 +12,15 @@ from .mock_for_tests import (
     URL_POST_DATA_WITH_INVALID_SHORT_URL,
     ANOTHER_USER_URL,
     NOT_FOUND_URL_ERROR,
+    USER_REGISTRATION_VALID_DATA,
+    USER_REGISTRATION_INVALID_PASSWORD_CONFIRMATION_DATA,
+    USER_REGISTRATION_INVALID_PASSWORD_LENGTH_DATA,
+    USER_REGISTRATION_EXISTS_USERNAME_DATA,
+    USERNAME_EXISTS_ERROR,
+    PASSWORD_CONFIRMATION_ERROR,
+    PASSWORD_LENGTH_ERROR,
+    REGISTRATION_REQUIRED_FIELDS_ERROR,
+    EMPTY_POST_REQUEST_ERROR,
 )
 
 
@@ -150,3 +159,55 @@ class TestApiResources(BaseTestCase):
 
         self.assertEqual(response.status, 401)
         self.assertEqual(response.text, 'Error: Authorization should be defined in request headers')
+
+    def test_register_user_success(self):
+        data = json.dumps(USER_REGISTRATION_VALID_DATA)
+        response = app.test_client.post(
+            '/api/v1/register', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 201)
+        self.assertEqual(type(response.json), dict)
+        self.assertIn("token", response.json)
+
+    def test_register_user_failed_with_password_confirmation_validation_error(self):
+        data = json.dumps(USER_REGISTRATION_INVALID_PASSWORD_CONFIRMATION_DATA)
+        response = app.test_client.post(
+            '/api/v1/register', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(type(response.json), dict)
+        self.assertEqual(response.json, PASSWORD_CONFIRMATION_ERROR)
+
+    def test_register_user_failed_with_password_length_validation_error(self):
+        data = json.dumps(USER_REGISTRATION_INVALID_PASSWORD_LENGTH_DATA)
+        response = app.test_client.post(
+            '/api/v1/register', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(type(response.json), dict)
+        self.assertEqual(response.json, PASSWORD_LENGTH_ERROR)
+
+    def test_register_user_failed_with_required_fields_validation_error(self):
+        data = json.dumps({})
+        response = app.test_client.post(
+            '/api/v1/register', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(type(response.json), dict)
+        self.assertEqual(response.json, REGISTRATION_REQUIRED_FIELDS_ERROR)
+
+    def test_register_user_failed_with_username_already_exists(self):
+        data = json.dumps(USER_REGISTRATION_EXISTS_USERNAME_DATA)
+        response = app.test_client.post(
+            '/api/v1/register', headers={}, data=data, gather_request=False)
+
+        self.assertEqual(response.status, 409)
+        self.assertEqual(type(response.json), dict)
+        self.assertEqual(response.json, USERNAME_EXISTS_ERROR)
+
+    def test_register_user_failed_with_empty_post_request(self):
+        response = app.test_client.post(
+            '/api/v1/register', headers=self.headers, data=None, gather_request=False)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(response.text, EMPTY_POST_REQUEST_ERROR)

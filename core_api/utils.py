@@ -72,8 +72,8 @@ def prepare_user_registration_data(request_data):
     return data
 
 
-async def check_username_existing(username):
-    result = await db_conn.get(USER_TABLE, ["id"], conditions_list=[("username", "=", username, None)])
+async def check_username_existing(db_connection, username):
+    result = await db_connection.get(USER_TABLE, ["id"], conditions_list=[("username", "=", username, None)])
     return True if result else False
 
 

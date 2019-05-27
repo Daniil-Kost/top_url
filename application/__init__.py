@@ -2,7 +2,7 @@ import contextvars
 from sanic import Blueprint
 from sanic import Sanic
 from lemkpg.constants import GET_ALL_COLUMNS
-from sanic.exceptions import Unauthorized
+from sanic.exceptions import Unauthorized, InvalidUsage
 
 from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView
 from core_api.config import USER_TABLE, USER_COLUMNS, db_conn, test_db_conn
@@ -10,6 +10,12 @@ from core_api.utils import response_converter
 
 
 app = Sanic("app")
+
+
+@app.middleware('request')
+async def check_post_request_data(request):
+    if request.method == "POST" and request.json is None:
+        raise InvalidUsage("POST request data should not be None")
 
 
 @app.middleware('request')

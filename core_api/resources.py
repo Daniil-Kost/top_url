@@ -81,7 +81,7 @@ class RegisterView(HTTPMethodView):
         form_data, errors = UserRegistrationForm().load(request.json)
         if errors:
             return response.json(errors, HTTPStatus.BAD_REQUEST)
-        if await check_username_existing(form_data["username"]):
+        if await check_username_existing(db_conn, form_data["username"]):
             return response.json({"error": "User with this username already exists"}, HTTPStatus.CONFLICT)
         data = prepare_user_registration_data(form_data)
         try:
