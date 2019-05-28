@@ -147,7 +147,7 @@ async def create_url_table():
     (
     id integer DEFAULT NULL,
     uuid uuid NOT NULL,
-    url character varying(256) NOT NULL,
+    url character varying NOT NULL,
     title character varying(256) NOT NULL,
     domain character varying(96) NOT NULL,
     short_url character varying(256) NOT NULL,

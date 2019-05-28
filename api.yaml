@@ -1,0 +1,307 @@
+info:
+  title: Sanic short urls api service
+  version: 1.0.0
+consumes:
+  - application/json
+produces:
+  - application/json
+swagger: '2.0'
+
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Id of user
+        example: 1
+      uuid:
+        type: string
+        description: Uuid of user
+        example: 31864bff-c31a-43f4-ab9e-abcb25745d50
+      username:
+        type: string
+        description: Username of user
+        example: demo
+      password:
+        type: string
+        description: Password of user. Should be at least 6 chars and max 20 chars
+        example: b167c684bbe6131c407fb118b99ef707
+      token:
+        type: string
+        description: Token for auth user in app (should be in request headers. e.g. Token df44625188ff656...)
+        example: df44625188ff6565b94e3044af84ad9be840d56741e28174d89c1fc3bca7bd53f249c4369a492780
+  Url:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Id of url
+        example: 1
+      uuid:
+        type: string
+        description: Uuid of url
+        example: 2e2ca33a-d9b8-496b-b47a-c092d8d7082b
+      url:
+        type: string
+        format: uri
+        description: Url which user wants to make shorter
+        example: https://marshmallow.readthedocs.io/en/3.0/
+      title:
+        type: string
+        description: Title in <h1> tag
+        example: marshmallow - simplified object serialization¶
+      domain:
+        type: string
+        description: App domain name for generation short url
+        example: http://localhost:8000
+      short_url:
+        type: string
+        description: Generated short url (domain + slug)
+        example: http://localhost:8000/rvkoVaoq
+      slug:
+        type: string
+        description: Slug with 8 chars for generation short url
+        example: rvkoVaoq
+      clicks:
+        type: integer
+        description: Sum of clicks on generated short_url
+        example: 4
+      create_dttm:
+        type: string
+        format: date-time
+        description: Date of creation
+        example: "2019-05-15 16:03:33.428849+03"
+  UserUrls:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Id of user urls
+        example: 1
+      user_id:
+        type: integer
+        description: Id of user
+        example: 1
+      url_id:
+        type: integer
+        description: Id of url
+        example: 3
+
+paths:
+  /urls:
+    get:
+      operationId: GetUrls
+      summary: Get list of all urls for user
+      parameters:
+        - name: Authorization
+          in: header
+          description: An authorization header with Token
+          example: Token e13364a88d988debe0339f773192a2574dbdf434aa302358f602dc710991c46dc0f2b5e6df6cac51
+          type: string
+          required: true
+      responses:
+        200:
+          description: List of dicts with urls data for user authenticated by token
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  description: Uuid of url
+                  example: 2e2ca33a-d9b8-496b-b47a-c092d8d7082b
+                url:
+                  type: string
+                  format: uri
+                  description: Url which user wants to make shorter
+                  example: https://marshmallow.readthedocs.io/en/3.0/
+                title:
+                  type: string
+                  description: Title in <h1> tag
+                  example: marshmallow - simplified object serialization¶
+                short_url:
+                  type: string
+                  description: Generated short url (domain + slug)
+                  example: http://localhost:8000/rvkoVaoq
+                clicks:
+                  type: integer
+                  description: Sum of clicks on generated short_url
+                  example: 4
+                create_dttm:
+                  type: string
+                  format: date-time
+                  description: Date of creation
+                  example: "2019-05-15 16:03:33.428849+03"
+    post:
+      operationId: CreateUrl
+      summary: Post url and get short_url for it
+      parameters:
+        - name: Authorization
+          in: header
+          description: An authorization header with Token
+          example: Token e13364a88d988debe0339f773192a2574dbdf434aa302358f602dc710991c46dc0f2b5e6df6cac51
+          type: string
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                format: uri
+                description: Url which user wants to make shorter
+                example: https://marshmallow.readthedocs.io/en/3.0/
+      responses:
+        201:
+          description: Return dict with short_url and other data
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: Uuid of url
+                example: 2e2ca33a-d9b8-496b-b47a-c092d8d7082b
+              url:
+                type: string
+                format: uri
+                description: Url which user wants to make shorter
+                example: https://marshmallow.readthedocs.io/en/3.0/
+              title:
+                type: string
+                description: Title in <h1> tag
+                example: marshmallow - simplified object serialization¶
+              short_url:
+                type: string
+                description: Generated short url (domain + slug)
+                example: http://localhost:8000/rvkoVaoq
+              clicks:
+                type: integer
+                description: Sum of clicks on generated short_url
+                example: 4
+              create_dttm:
+                type: string
+                format: date-time
+                description: Date of creation
+                example: "2019-05-15 16:03:33.428849+03"
+  /urls/{uuid}:
+    get:
+      operationId: GetUrlByUuid
+      summary: get dict with url data
+      parameters:
+        - name: Authorization
+          in: header
+          description: An authorization header with Token
+          example: Token e13364a88d988debe0339f773192a2574dbdf434aa302358f602dc710991c46dc0f2b5e6df6cac51
+          type: string
+          required: true
+      responses:
+        200:
+          description: Dict with urls data for user authenticated by token
+          schema:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: Uuid of url
+                example: 2e2ca33a-d9b8-496b-b47a-c092d8d7082b
+              url:
+                type: string
+                format: uri
+                description: Url which user wants to make shorter
+                example: https://marshmallow.readthedocs.io/en/3.0/
+              title:
+                type: string
+                description: Title in <h1> tag
+                example: marshmallow - simplified object serialization¶
+              short_url:
+                type: string
+                description: Generated short url (domain + slug)
+                example: http://localhost:8000/rvkoVaoq
+              clicks:
+                type: integer
+                description: Sum of clicks on generated short_url
+                example: 4
+              create_dttm:
+                type: string
+                format: date-time
+                description: Date of creation
+                example: "2019-05-15 16:03:33.428849+03"
+    delete:
+      operationId: DeleteUrlByUuid
+      summary: Delete url by uuid
+      parameters:
+        - name: Authorization
+          in: header
+          description: An authorization header with Token
+          example: Token e13364a88d988debe0339f773192a2574dbdf434aa302358f602dc710991c46dc0f2b5e6df6cac51
+          type: string
+          required: true
+      responses:
+        204:
+          description: Delete Url. Return NO CONTENT
+  /register:
+    post:
+      operationId: RegisterUser
+      summary: Register new user and get token for authorization
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                description: username for the new user
+                example: demo
+              password:
+                type: string
+                description: password for the new user. Should be at least 6 chars and max 20 chars
+                example: Test2019
+              confirm_password:
+                type: string
+                description: confirm password for the new user. Should be equal password field.
+                example: Test2019
+      responses:
+        201:
+          description: Dict with urls data for user authenticated by token
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Token for authentication and usage in Authorization request header
+                example: e13364a88d988debe0339f773192a2574dbdf434aa302358f602dc710991c46dc0f2b5e6df6cac51
+  /auth:
+    post:
+      operationId: RegisterUser
+      summary: Authencticate by post credentails user and get token for it
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                description: username for the new user
+                example: demo
+              password:
+                type: string
+                description: password for the new user. Should be at least 6 chars and max 20 chars
+                example: Test2019
+      responses:
+        200:
+          description: Dict with urls data for user authenticated by token
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Token for authentication and usage in Authorization request header
+                example: e13364a88d988debe0339f773192a2574dbdf434aa302358f602dc710991c46dc0f2b5e6df6cac51
