@@ -16,3 +16,4 @@ USER_COLUMNS = ("id", "uuid", "username", "password", "token")
 USER_URLS_COLUMNS = ("id", "user_id", "url_id")
 
 db_conn = AsyncLemkPgApi(db_name=DB_NAME, db_password=DB_PASSWORD, db_user=DB_USER, db_host=DB_HOST)
+test_db_conn = AsyncLemkPgApi(db_name="urls_test", db_password="postgres", db_user="postgres", db_host="localhost")

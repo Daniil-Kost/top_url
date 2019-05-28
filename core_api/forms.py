@@ -39,10 +39,7 @@ class UserRegistrationForm(Schema):
 
 class UserAuthForm(Schema):
     username = fields.String(required=True)
-    password = fields.String(required=True,
-                             validate=Length(max=20,
-                                             min=6,
-                                             error="Password should be at least 6 chars and max 100 chars"))
+    password = fields.String(required=True)
 
     @post_load
     def password_hash(self, data):

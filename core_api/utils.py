@@ -6,10 +6,10 @@ from datetime import datetime
 from urllib.request import urlopen
 from urllib.error import HTTPError
 
+from .config import DEFAULT_DOMAIN, USER_TABLE, USER_URLS_TABLE, URLS_TABLE
 
-from .config import DEFAULT_DOMAIN, USER_TABLE, db_conn
 
-
+# convert response to dict
 def response_converter(query_result, columns, exclude_fields=None):
     result = []
     for records in query_result:
@@ -72,6 +72,22 @@ def prepare_user_registration_data(request_data):
     return data
 
 
-async def check_username_existing(username):
-    result = await db_conn.get(USER_TABLE, ["id"], conditions_list=[("username", "=", username, None)])
+async def check_username_existing(db_connection, username):
+    result = await db_connection.get(USER_TABLE, ["id"], conditions_list=[("username", "=", username, None)])
     return True if result else False
+
+
+async def get_url_by_uuid(db_connection, url_uuid, request_user_id):
+    query = f"""SELECT * FROM {URLS_TABLE} FULL JOIN {USER_URLS_TABLE}
+    ON {USER_URLS_TABLE}.user_id = {request_user_id}
+    AND {URLS_TABLE}.uuid = '{url_uuid}' WHERE {URLS_TABLE}.id IN ({USER_URLS_TABLE}.url_id)"""
+    query_result = await db_connection.raw_query(query)
+    return query_result
+
+
+async def get_user_urls(db_connection, request_user_id):
+    query = f"""SELECT * FROM {URLS_TABLE} FULL JOIN {USER_URLS_TABLE}
+    ON {USER_URLS_TABLE}.user_id = {request_user_id}
+    WHERE {URLS_TABLE}.id IN ({USER_URLS_TABLE}.url_id)"""
+    query_result = await db_connection.raw_query(query)
+    return query_result
