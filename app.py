@@ -1,6 +1,11 @@
 from application import app, create_api
+from core_api.config import APP_HOST, APP_PORT
+
+
+def run_app():
+    create_api()
+    app.run(host=APP_HOST, port=APP_PORT)
 
 
 if __name__ == "__main__":
-    create_api()
-    app.run(host="localhost", port="8000")
+    run_app()

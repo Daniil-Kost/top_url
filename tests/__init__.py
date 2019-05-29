@@ -5,7 +5,16 @@ import unittest
 
 from application import create_api
 from db_setup import setup
-from core_api.config import test_db_conn, URLS_TABLE, USER_TABLE, USER_URLS_TABLE
+from core_api.config import (
+    test_db_conn,
+    URLS_TABLE,
+    USER_TABLE,
+    USER_URLS_TABLE,
+    TEST_CONNECTION_DB_NAME,
+    TEST_CONNECTION_DB_PASSWORD,
+    TEST_CONNECTION_DB_USER,
+    TEST_CONNECTION_DB_HOST,
+)
 from .fixtures import ALL_URLS_DATA, USER_DATA, USER_URLS_DATA
 
 
@@ -42,7 +51,8 @@ class BaseTestCase(unittest.TestCase):
         self.context.set("default_context")
 
     def setUp(self):
-        conn = psycopg2.connect(dbname="postgres", user="postgres", password="postgres", host="localhost")
+        conn = psycopg2.connect(dbname=TEST_CONNECTION_DB_NAME, user=TEST_CONNECTION_DB_USER,
+                                password=TEST_CONNECTION_DB_PASSWORD, host=TEST_CONNECTION_DB_HOST)
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         with conn.cursor() as cur:
             cur.execute('CREATE DATABASE urls_test')
@@ -54,7 +64,8 @@ class BaseTestCase(unittest.TestCase):
         asyncio.run(load_fixtures())
 
     def tearDown(self):
-        conn = psycopg2.connect(dbname="postgres", user="postgres", password="postgres", host="localhost")
+        conn = psycopg2.connect(dbname=TEST_CONNECTION_DB_NAME, user=TEST_CONNECTION_DB_USER,
+                                password=TEST_CONNECTION_DB_PASSWORD, host=TEST_CONNECTION_DB_HOST)
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         with conn.cursor() as cur:
             cur.execute('DROP DATABASE IF EXISTS urls_test')
