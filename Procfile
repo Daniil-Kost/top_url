@@ -1,1 +1,1 @@
-worker: python app.py $PORT
+web: python3.7 app.py --log-file -
