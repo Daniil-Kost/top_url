@@ -6,6 +6,7 @@ bs4
 sanic
 shortuuid
 lemkpg
+gunicorn
 marshmallow
 psycopg2
 psycopg2-binary
