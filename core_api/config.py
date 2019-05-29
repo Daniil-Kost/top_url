@@ -2,9 +2,9 @@ import os
 from lemkpg import AsyncLemkPgApi
 
 # application config variables
-APP_HOST = os.environ.get("APP_HOST", "lemk-urls.herokuapp.com")
-APP_PORT = os.environ.get("APP_PORT", "8000")
-DEFAULT_DOMAIN = os.environ.get("DEFAULT_DOMAIN", "http://localhost:8000")
+APP_HOST = os.environ.get("APP_HOST", "0.0.0.0")
+APP_PORT = os.environ.get("APP_PORT", "1337")
+DEFAULT_DOMAIN = os.environ.get("DEFAULT_DOMAIN", "http://0.0.0.0:1337")
 
 # database config variables
 DB_NAME = os.environ.get("DB_NAME", "urls_database")
