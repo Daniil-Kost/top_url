@@ -1,10 +1,11 @@
 import contextvars
+import os
 from sanic import Blueprint
 from sanic import Sanic
 from lemkpg.constants import GET_ALL_COLUMNS
 from sanic.exceptions import Unauthorized, InvalidUsage
 
-from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView
+from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView, DemoResource
 from core_api.config import USER_TABLE, USER_COLUMNS, db_conn, test_db_conn
 from core_api.utils import response_converter
 
@@ -44,9 +45,13 @@ async def check_authorization_and_add_user_to_request(request):
         if result and request.path not in registration_and_auth_paths and api_path in request.path:
             user = response_converter(result, USER_COLUMNS, ("password",))[0]
             request["user"] = user
+        if request.path not in registration_and_auth_paths and api_path not in request.path:
+            user = "daniil"
+            request["user"] = user
 
 
 def create_api():
+    app.static('/static', 'application/static')
     api_v1 = Blueprint("v1", url_prefix="/api/v1", strict_slashes=False)
 
     api_v1.add_route(UrlsView.as_view(), '/urls', strict_slashes=False)
@@ -54,5 +59,7 @@ def create_api():
     api_v1.add_route(RegisterView.as_view(), '/register', strict_slashes=False)
     api_v1.add_route(AuthView.as_view(), '/auth', strict_slashes=False)
     app.add_route(RedirectView.as_view(), '/<slug>', strict_slashes=False)
+
+    app.add_route(DemoResource.as_view(), '', strict_slashes=False)
 
     app.blueprint(api_v1)

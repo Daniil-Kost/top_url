@@ -3,6 +3,7 @@ from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response
 from http import HTTPStatus
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 from .forms import CreateNewShortUrlForm, UserRegistrationForm, UserAuthForm
 from .config import (
@@ -119,3 +120,14 @@ class RedirectView(HTTPMethodView):
         short_url_clicks = query_result[0][7] + 1
         await db_conn.update(URLS_TABLE, {"clicks": short_url_clicks}, [("uuid", "=", url_uuid, None)])
         return response.redirect(url_for_redirect)
+
+
+class DemoResource(HTTPMethodView):
+
+    async def get(self, request):
+        env = Environment(
+            loader=PackageLoader('application', 'templates'),
+            autoescape=select_autoescape(['html', 'xml'])
+        )
+        template = env.get_template('index.html')
+        return response.html(template.render(request=request, user=request["user"]))

@@ -1,5 +1,5 @@
 info:
-  title: Sanic short urls api service
+  title: Top Url Service
   version: 1.0.0
 consumes:
   - application/json
@@ -54,11 +54,11 @@ definitions:
       domain:
         type: string
         description: App domain name for generation short url
-        example: http://localhost:8000
+        example: http://url2.top
       short_url:
         type: string
         description: Generated short url (domain + slug)
-        example: http://localhost:8000/rvkoVaoq
+        example: http://url2.top/rvkoVaoq
       slug:
         type: string
         description: Slug with 8 chars for generation short url
@@ -124,7 +124,7 @@ paths:
                 short_url:
                   type: string
                   description: Generated short url (domain + slug)
-                  example: http://localhost:8000/rvkoVaoq
+                  example: http://url2.top/rvkoVaoq
                 clicks:
                   type: integer
                   description: Sum of clicks on generated short_url
@@ -177,7 +177,7 @@ paths:
               short_url:
                 type: string
                 description: Generated short url (domain + slug)
-                example: http://localhost:8000/rvkoVaoq
+                example: http://url2.top/rvkoVaoq
               clicks:
                 type: integer
                 description: Sum of clicks on generated short_url
@@ -220,7 +220,7 @@ paths:
               short_url:
                 type: string
                 description: Generated short url (domain + slug)
-                example: http://localhost:8000/rvkoVaoq
+                example: http://url2.top/rvkoVaoq
               clicks:
                 type: integer
                 description: Sum of clicks on generated short_url
@@ -242,7 +242,7 @@ paths:
           required: true
       responses:
         204:
-          description: Delete Url. Return NO CONTENT
+          description: Delete Url. Return - NO CONTENT
   /register:
     post:
       operationId: RegisterUser
