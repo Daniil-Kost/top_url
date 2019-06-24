@@ -276,9 +276,44 @@
     <!-- End Call to Action Section -->
 
 
-    <!-- Start Feature Section -->
+    <!-- Start Services Section -->
         <section id="service" class="services-section">
             <div class="container">
+                <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title text-center noselect">
+                        <h3>Create short url</h3>
+                        <p>Create short url link through form below</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <form name="sentMessage" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Your url *" id="names" required data-validation-required-message="Пожалуйста напишите ваше имя." name="url">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Your custom short url (optional)" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="short_url">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="clearfixff"></div>
+                            <div class="col-lg-12 text-center">
+                                    <button type="submit" class="btn btn-success">Create short url</button>
+                                </div>
+                        </div>
+                    </form>
+
+                </div>
+
+
+            </div>
+                <br><br>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="section-title text-center">
@@ -381,28 +416,75 @@
 
 
     <!-- Start Team Member Section -->
-    <section id="login" class="team-member-section">
+    <section id="login" class="contact">
         <div class="container">
             <div class="row">
-                <div class="col-md-12 col-sm-12">
-                    <div class="section-title text-center">
-                            <h3>Про меня</h3>
-                            <p>Мои недавние фотографии</p>
-                        </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="team-section">
-                                <div class="our-team">
-                                </div>
-
-                    
+                <div class="col-lg-12">
+                    <div class="section-title text-center noselect">
+                        <h3>Login or sign up</h3>
+                        <p class="white-text">Let`s sign in or register for view all your created short urls</p>
                     </div>
                 </div>
             </div>
-                
+            <div class="row">
+                <div class="col-lg-12">
+                    <form name="sentMessage" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group text-center noselect">
+                                <h4 style="color: white">Login Form</h4>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Username *" id="names" required data-validation-required-message="Пожалуйста напишите ваше имя." name="name">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Password *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+
+                            <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+
+<!--                    -----------------------------------  -->
+                                        <form name="sentMessage" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group text-center noselect">
+                                <h4 style="color: white">Registration From</h4>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Username *" id="names" required data-validation-required-message="Пожалуйста напишите ваше имя." name="name">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Password *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Confirm Password *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="Email *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+
+                            <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+
+            </div>
         </div>
     </section>
     <!-- End Team Member Section -->
@@ -456,53 +538,6 @@
 
     <section id="contact" class="contact">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title text-center noselect">
-                        <h3>Связатся со мной</h3>
-                        <p class="white-text">Свяжитесь со мной через форму обратной связи или выберете вариант приведенный ниже</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <form name="sentMessage" method="post">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Ваше имя *" id="names" required data-validation-required-message="Пожалуйста напишите ваше имя." name="name">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Ваш Email *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group">
-                                    <input type="tel" class="form-control" placeholder="Ваш телефон *" id="phones" required data-validation-required-message="Пожалуйста укажите ваш телефон." name="phone">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <textarea class="form-control" placeholder="Ваше сообщение *" id="messages" required data-validation-required-message="Пожалуйста оставте ваше сообщение." name="message"></textarea>
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                            </div>
-                            <div class="clearfixff"></div>
-                            <div class="col-lg-12 text-center">
-                                <div id="success-button">
-
-                                </div>
-                                <button type="submit" class="btn btn-primary">Отправить</button>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-
-
-            </div>
 
             <div class="row">
                 <div class="col-md-4">
