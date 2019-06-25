@@ -1,6 +1,5 @@
 import psycopg2
 import uuid
-import requests
 from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response

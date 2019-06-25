@@ -106,7 +106,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll noselect" href="#page-top">Top Url {{ request.session }}}</a>
+                <a class="navbar-brand page-scroll noselect" href="#page-top">Top Url</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -118,12 +118,12 @@
                     <li>
                         <a class="page-scroll" href="#feature">Features</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#service">Services</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#login">Login</a>
-                    </li>
+<!--                    <li>-->
+<!--                        <a class="page-scroll" href="#service">Services</a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <a class="page-scroll" href="#login">Login</a>-->
+<!--                    </li>-->
                     <li>
                         <a class="page-scroll" href="#api">API</a>
                     </li>
@@ -280,16 +280,13 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Your url *" id="url" required data-validation-required-message="Пожалуйста напишите ваше имя." name="url">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Your custom short url (optional)" id="short_url" required data-validation-required-message="Пожалуйста введите ваш email ." name="short_url">
+                                    <input type="url" class="form-control" placeholder="Your url *" id="url" required data-validation-required-message="Please input valid url address." name="url">
                                     <p class="help-block text-danger"></p>
                                 </div>
                             </div>
                             <div class="clearfixff"></div>
                             <div class="col-lg-12 text-center">
+                                <br><br>
                                     <button type="submit" class="btn btn-primary">Create short url</button>
                                 </div>
                         </div>
@@ -302,185 +299,6 @@
         </div>
     </section>
     <!-- End Call to Action Section -->
-
-
-    <!-- Start Services Section -->
-        <section id="service" class="services-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="section-title text-center">
-                            <h3>Услуги</h3>
-                            <p>Все то что вы можете заказать здесь и сейчас по лучшей цене !</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="feature-2">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <i class="fa fa-laptop"></i>
-                                    <div class="border"></div>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Лендинг</h4>
-                                    <p>Разработка отличных современных лендингов под ключ в быстрый срок и по привлекательной цене.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="feature-2">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <i class="fa fa-css3"></i>
-                                    <div class="border"></div>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">HTML5 & CSS3</h4>
-                                    <p>Верстка адаптивных шаблонов по макету, натяжка на CMS, доработка и апгрейд существующих шаблонов </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="feature-2">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <i class="fa fa-wordpress"></i>
-                                    <div class="border"></div>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Wordpress or Tilda</h4>
-                                    <p>Создание сайтов на базе популярных CMS WordPress и Tilda включая блоги, лендинги и интернет-магазины</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="feature-2">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <i class="fa fa-gift"></i>
-                                    <div class="border"></div>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Интернет Магазин</h4>
-                                    <p>Создание продвинутого интернет магазина на платформе Wordpress, Wix, PrestaShop по хорошей цене.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="feature-2">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <i class="fa fa-code"></i>
-                                    <div class="border"></div>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Веб-Программирование и разработка Telegram ботов </h4>
-                                    <p>Написание сложных сайтов на Django, Flask и Sanic c полным циклом разработки и интеграции базы данных.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                        <div class="feature-2">
-                            <div class="media">
-                                <div class="pull-left">
-                                    <i class="fa fa-keyboard-o"></i>
-                                    <div class="border"></div>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">Доработка Сайтов</h4>
-                                    <p>Устранение неполадок на существующих сайтах. Оптимизация их работы и осовременивание дизайна.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.col-md-4 -->
-                    
-                </div><!-- /.row -->
-            
-            </div><!-- /.container -->
-        </section>
-        <!-- End Feature Section -->
-
-
-    <!-- Start Team Member Section -->
-    <section id="login" class="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title text-center noselect">
-                        <h3>Login or sign up</h3>
-                        <p class="white-text">Let`s sign in or register for view all your created short urls</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <form name="Login" action="/login" method="post">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group text-center noselect">
-                                <h4 style="color: white">Login Form</h4>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Username *" id="username-login" required data-validation-required-message="Please input your username." name="username">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Password *" id="pass-login" required data-validation-required-message="Please input your password." name="password">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-
-                            <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                            </div>
-                        </div>
-                    </form>
-
-<!--                    -----------------------------------  -->
-                    <form name="Register" action="/register" method="post">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group text-center noselect">
-                                <h4 style="color: white">Registration From</h4>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Username *" id="names" required data-validation-required-message="Пожалуйста напишите ваше имя." name="name">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Password *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Confirm Password *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-                                                                <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Email *" id="emails" required data-validation-required-message="Пожалуйста введите ваш email ." name="email">
-                                    <p class="help-block text-danger"></p>
-                                </div>
-
-                            <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-
-
-            </div>
-        </div>
-    </section>
-    <!-- End Team Member Section -->
 
 
       <!-- Start About Us Section -->
@@ -498,7 +316,7 @@
 
                 <div class="col-md-4">
                     <div class="welcome-section text-center">
-                        <img src="/static/images/site-create-logo.jpg" class="img-responsive" alt="..">
+                        <img src="/static/images/rsz_api.png" class="img-responsive" alt="..">
                         <h4>Лучшие технологии бекенда</h4>
                         <div class="border"></div>
                         <p>В процессе создания бекенда (движка) - содержащего всю логику работы сайта, я  использую только самые современные и передовые технологии веб-разработки: Python, Django, DB SQLite3 и MySQL 5.7, Apache2 и другие.</p>
@@ -507,7 +325,7 @@
 
                 <div class="col-md-4">
                     <div class="welcome-section text-center">
-                        <img src="/static/images/frontend1.jpg" class="img-responsive" alt="..">
+                        <img src="/static/images/rsz_github-mark.png" class="img-responsive" alt="..">
                         <h4>Передовые технологии фронтенда</h4>
                         <div class="border"></div>
                         <p>При создании внешнего облика сайта я делаю ставку на приятный дизайн и хорошую информативность. Для этого я использую следующие технологии: HTML5/CSS3, Twitter Bootstrap, JavaScript, jQuery, Ajax и другие.</p>
@@ -516,7 +334,7 @@
 
                 <div class="col-md-4">
                     <div class="welcome-section text-center">
-                        <img src="/static/images/phones.jpg" class="img-responsive" alt="..">
+                        <img src="/static/images/rsz_postman.png" class="img-responsive" alt="..">
                         <h4>Всегда на связи</h4>
                         <div class="border"></div>
                         <p>Вы можете связатся со мной в течении дня по любым вопросам. Мне можно писать в Facebook, Telegram, WhatsApp, Viber, Skype, через email и по телефону. Если вы из Харькова - возможна личная встреча.</p>
@@ -606,7 +424,6 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="/static/js/script.js"></script>
-    <script src="/static/js/cookie.js"></script>
 
 </body>
 
