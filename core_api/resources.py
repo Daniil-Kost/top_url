@@ -3,14 +3,15 @@ from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response
 from http import HTTPStatus
-from jinja2 import Environment, PackageLoader, select_autoescape
 
 from .forms import CreateNewShortUrlForm, UserRegistrationForm, UserAuthForm
 from .config import (
     URLS_TABLE,
     USER_TABLE,
     USER_URLS_TABLE,
-    URLS_COLUMNS
+    URLS_COLUMNS,
+    template,
+    auth,
 )
 from .utils import (
     response_converter,
@@ -20,6 +21,19 @@ from .utils import (
     get_url_by_uuid,
     get_user_urls,
 )
+
+
+async def login(request):
+    db_conn = request["db_conn"]
+    form_data, login_errors = UserAuthForm().load(request.form)
+    if login_errors:
+        return response.html(template.render(request=request, login_errors=login_errors))
+
+    user = await db_conn.get(USER_TABLE, ["*"],
+                             conditions_list=[("username", "=", form_data["username"], None),
+                                              ("password", "=", form_data["password"], "AND")])
+    auth.login_user(request, user)
+    return response.redirect('/')
 
 
 class UrlsView(HTTPMethodView):
@@ -125,9 +139,4 @@ class RedirectView(HTTPMethodView):
 class DemoResource(HTTPMethodView):
 
     async def get(self, request):
-        env = Environment(
-            loader=PackageLoader('application', 'templates'),
-            autoescape=select_autoescape(['html', 'xml'])
-        )
-        template = env.get_template('index.html')
-        return response.html(template.render(request=request, user=request["user"]))
+        return response.html(template.render(request=request))

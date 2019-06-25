@@ -1,5 +1,9 @@
 import os
+from jinja2 import Environment, PackageLoader, select_autoescape
+from sanic_auth import Auth
+
 from lemkpg import AsyncLemkPgApi
+app = ''
 
 # application config variables
 APP_HOST = os.environ.get("APP_HOST", "127.0.0.1")
@@ -36,3 +40,14 @@ USER_URLS_COLUMNS = ("id", "user_id", "url_id")
 db_conn = AsyncLemkPgApi(db_name=DB_NAME, db_password=DB_PASSWORD, db_user=DB_USER, db_host=DB_HOST)
 test_db_conn = AsyncLemkPgApi(db_name=TEST_DB_NAME, db_password=TEST_DB_PASSWORD,
                               db_user=TEST_DB_USER, db_host=TEST_DB_HOST)
+
+# Jinja2 config vars
+env = Environment(
+    loader=PackageLoader('application', 'templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
+template = env.get_template('index.html')
+
+# Sanic-Auth config
+# auth = Auth(app)
+auth = ''

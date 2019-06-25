@@ -12,3 +12,4 @@ psycopg2
 psycopg2-binary
 pytest
 Jinja2
+Sanic-Auth

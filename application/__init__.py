@@ -45,9 +45,6 @@ async def check_authorization_and_add_user_to_request(request):
         if result and request.path not in registration_and_auth_paths and api_path in request.path:
             user = response_converter(result, USER_COLUMNS, ("password",))[0]
             request["user"] = user
-        if request.path not in registration_and_auth_paths and api_path not in request.path:
-            user = "daniil"
-            request["user"] = user
 
 
 def create_api():
