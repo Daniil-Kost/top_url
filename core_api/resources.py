@@ -1,4 +1,6 @@
 import psycopg2
+import uuid
+import requests
 from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response
@@ -10,6 +12,7 @@ from .config import (
     USER_TABLE,
     USER_URLS_TABLE,
     URLS_COLUMNS,
+    USER_COLUMNS,
     template,
     auth,
 )
@@ -20,6 +23,7 @@ from .utils import (
     check_username_existing,
     get_url_by_uuid,
     get_user_urls,
+    User,
 )
 
 
@@ -29,10 +33,17 @@ async def login(request):
     if login_errors:
         return response.html(template.render(request=request, login_errors=login_errors))
 
-    user = await db_conn.get(USER_TABLE, ["*"],
-                             conditions_list=[("username", "=", form_data["username"], None),
-                                              ("password", "=", form_data["password"], "AND")])
+    query_result = await db_conn.get(USER_TABLE, ["*"],
+                                     conditions_list=[("username", "=", form_data["username"], None),
+                                                      ("password", "=", form_data["password"], "AND")])
+    result = response_converter(query_result, USER_COLUMNS)[0]
+    user = User(result["id"], result["username"])
     auth.login_user(request, user)
+    import pprint
+    pprint.pprint('%%%%%%%%%%' * 5)
+    pprint.pprint(user)
+    request.headers["session"] = f"{uuid.uuid4()}"
+    r = response.CookieJar(request.headers)
     return response.redirect('/')
 
 
@@ -139,4 +150,4 @@ class RedirectView(HTTPMethodView):
 class DemoResource(HTTPMethodView):
 
     async def get(self, request):
-        return response.html(template.render(request=request))
+        return response.html(template.render(request=request, session=request["session"]))

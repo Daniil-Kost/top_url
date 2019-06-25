@@ -91,3 +91,9 @@ async def get_user_urls(db_connection, request_user_id):
     WHERE {URLS_TABLE}.id IN ({USER_URLS_TABLE}.url_id)"""
     query_result = await db_connection.raw_query(query)
     return query_result
+
+
+class User:
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name

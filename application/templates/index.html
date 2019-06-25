@@ -106,7 +106,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll noselect" href="#page-top">Top Url</a>
+                <a class="navbar-brand page-scroll noselect" href="#page-top">Top Url {{ request.session }}}</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -606,6 +606,7 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="/static/js/script.js"></script>
+    <script src="/static/js/cookie.js"></script>
 
 </body>
 

@@ -1,9 +1,8 @@
 import os
 from jinja2 import Environment, PackageLoader, select_autoescape
-from sanic_auth import Auth
-
 from lemkpg import AsyncLemkPgApi
-app = ''
+from application.conf import app
+from sanic_auth import Auth
 
 # application config variables
 APP_HOST = os.environ.get("APP_HOST", "127.0.0.1")
@@ -48,6 +47,5 @@ env = Environment(
 )
 template = env.get_template('index.html')
 
-# Sanic-Auth config
-# auth = Auth(app)
-auth = ''
+# Sanic-Auth variable
+auth = Auth(app)
