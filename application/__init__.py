@@ -3,7 +3,7 @@ from sanic import Blueprint
 from lemkpg.constants import GET_ALL_COLUMNS
 from sanic.exceptions import Unauthorized, InvalidUsage
 
-from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView, DemoResource, login
+from core_api.resources import UrlsView, UrlView, RegisterView, AuthView, RedirectView, main_page
 from core_api.config import USER_TABLE, USER_COLUMNS, db_conn, test_db_conn
 from core_api.utils import response_converter
 from .conf import app
@@ -44,12 +44,6 @@ async def check_authorization_and_add_user_to_request(request):
             request["user"] = user
 
 
-session = {}
-@app.middleware('request')
-async def add_session(request):
-    request["session"] = session
-
-
 def create_api():
     app.static('/static', 'application/static')
     api_v1 = Blueprint("v1", url_prefix="/api/v1", strict_slashes=False)
@@ -60,8 +54,7 @@ def create_api():
     api_v1.add_route(AuthView.as_view(), '/auth', strict_slashes=False)
     app.add_route(RedirectView.as_view(), '/<slug>', strict_slashes=False)
 
-    app.add_route(DemoResource.as_view(), '', strict_slashes=False)
-    app.add_route(login, '/login', strict_slashes=False, methods=["GET", "POST"])
+    app.add_route(main_page, '', strict_slashes=False, methods=["GET", "POST"])
 
     app.blueprint(api_v1)
 

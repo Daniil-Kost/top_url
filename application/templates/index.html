@@ -51,6 +51,8 @@
 
     <script src="https://use.fontawesome.com/6e4fa739ae.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+
 
     
     <!--[if lt IE 9]>
@@ -154,6 +156,32 @@
             <!--/ Indicators end-->
 
             <!-- Carousel inner -->
+            {%  if template_data %}
+
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img class="img-responsive" src="/static/images/header-bg-1.jpg" alt="slider">
+                    <div class="slider-content">
+                        <div class="col-md-12 text-center">
+                            <script>
+                                var clipboard = new ClipboardJS('.demo_copy');
+                                clipboard.on('success', function(e) {
+                                    console.log(e);
+                                });
+                                clipboard.on('error', function(e) {
+                                    console.log(e);
+                                });
+                            </script>
+                            <p>
+                                Short url: <br>
+                                <a href="{{ template_data['short_url'] }}" target="_blank">
+                            <p id="short_url_id" class="short_url_copy">{{ template_data['short_url'] }}</p></a>
+                            <button class="btn btn-primary demo_copy" type="btn" data-clipboard-text="{{ template_data['short_url'] }}">Copy short url</button></p>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Carousel item end -->
+            {%  else %}
             <div class="carousel-inner">
                 <div class="item active">
                     <img class="img-responsive" src="/static/images/header-bg-1.jpg" alt="slider">
@@ -168,6 +196,8 @@
                     </div>
                 </div>
                 <!--/ Carousel item end -->
+
+                {% endif %}
                 
                 <div class="item">
                     <img class="img-responsive" src="/static/images/header-back.png" alt="slider">
@@ -251,7 +281,7 @@
                             <i class="fa fa-telegram" aria-hidden="true"></i>
                             <div class="feature-content">
                                 <h4>Top Url Telegram Bot</h4>
-                                <p>We are working with Top Url Telegram Bot with all web features.</p>
+                                <p>We are developing Top Url Telegram Bot with all web features.</p>
                             </div>
                         </div>
                     </div>
@@ -307,8 +337,10 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <div class="section-title text-center">
-                            <h3>Приемущества</h3>
-                            <p>Детализация преимуществ сотрудничества со мной</p>
+                            <h3>Top Url REST API</h3>
+                        <p>Swagger docs: <a href="https://app.swaggerhub.com/apis/lemk1/top_url_api/1.0.0#/">
+                            https://app.swaggerhub.com/apis/lemk1/top_url_api/1.0.0#/
+                        </a></p>
                         </div>
                 </div>
             </div>
@@ -328,7 +360,7 @@
                         <img src="/static/images/rsz_github-mark.png" class="img-responsive" alt="..">
                         <h4>Передовые технологии фронтенда</h4>
                         <div class="border"></div>
-                        <p>При создании внешнего облика сайта я делаю ставку на приятный дизайн и хорошую информативность. Для этого я использую следующие технологии: HTML5/CSS3, Twitter Bootstrap, JavaScript, jQuery, Ajax и другие.</p>
+                        <p>При создании внешнего облика с айта я делаю ставку на приятный дизайн и хорошую информативность. Для этого я использую следующие технологии: HTML5/CSS3, Twitter Bootstrap, JavaScript, jQuery, Ajax и другие.</p>
                     </div>
                 </div>
 

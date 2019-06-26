@@ -1,5 +1,5 @@
 import psycopg2
-import uuid
+import json
 from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
 from sanic.views import HTTPMethodView
 from sanic import response
@@ -11,9 +11,8 @@ from .config import (
     USER_TABLE,
     USER_URLS_TABLE,
     URLS_COLUMNS,
-    USER_COLUMNS,
     template,
-    auth,
+    DEFAULT_DOMAIN,
 )
 from .utils import (
     response_converter,
@@ -22,28 +21,37 @@ from .utils import (
     check_username_existing,
     get_url_by_uuid,
     get_user_urls,
-    User,
 )
 
 
-async def login(request):
-    db_conn = request["db_conn"]
-    form_data, login_errors = UserAuthForm().load(request.form)
-    if login_errors:
-        return response.html(template.render(request=request, login_errors=login_errors))
+async def main_page(request):
+    template_data = {}
+    errors = {}
+    if request.method == 'POST':
+        db_conn = request["db_conn"]
+        data = {'url': request.form.get('url')}
+        form_data, errors = CreateNewShortUrlForm().load(data)
+        if errors:
+            errors["errors"] = [error for error in errors]
+        data = prepare_post_url_data(form_data)
+        try:
+            await db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
+        except psycopg2.ProgrammingError as e:
+            pass
+            # return response.redirect(DEFAULT_DOMAIN)
 
-    query_result = await db_conn.get(USER_TABLE, ["*"],
-                                     conditions_list=[("username", "=", form_data["username"], None),
-                                                      ("password", "=", form_data["password"], "AND")])
-    result = response_converter(query_result, USER_COLUMNS)[0]
-    user = User(result["id"], result["username"])
-    auth.login_user(request, user)
-    import pprint
-    pprint.pprint('%%%%%%%%%%' * 5)
-    pprint.pprint(user)
-    request.headers["session"] = f"{uuid.uuid4()}"
-    r = response.CookieJar(request.headers)
-    return response.redirect('/')
+        try:
+            query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS,
+                                             conditions_list=[("uuid", "=", data["uuid"], None)])
+
+            exclude_fields = ("id", "domain", "slug", "url", "clicks")
+            result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
+            template_data["short_url"] = result[0]["short_url"]
+        except psycopg2.ProgrammingError as e:
+            pass
+            # return response.redirect(DEFAULT_DOMAIN)
+
+    return response.html(template.render(request=request, template_data=template_data))
 
 
 class UrlsView(HTTPMethodView):
@@ -144,9 +152,3 @@ class RedirectView(HTTPMethodView):
         short_url_clicks = query_result[0][7] + 1
         await db_conn.update(URLS_TABLE, {"clicks": short_url_clicks}, [("uuid", "=", url_uuid, None)])
         return response.redirect(url_for_redirect)
-
-
-class DemoResource(HTTPMethodView):
-
-    async def get(self, request):
-        return response.html(template.render(request=request, session=request["session"]))

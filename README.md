@@ -5,7 +5,7 @@
 2) REST API interface for cooperation through json data and get short urls with stats for them
 
 
-_******_API Swagger docs:_******_  https://app.swaggerhub.com/apis-docs/lemk1/top-url_service/1.0.0
+_******_API Swagger docs:_******_ https://app.swaggerhub.com/apis/lemk1/top_url_api/1.0.0#/
 
 ##### **How to use '_Top Url_' REST API?:**
 
