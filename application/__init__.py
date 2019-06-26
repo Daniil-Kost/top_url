@@ -57,4 +57,3 @@ def create_api():
     app.add_route(main_page, '', strict_slashes=False, methods=["GET", "POST"])
 
     app.blueprint(api_v1)
-
