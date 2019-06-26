@@ -46,17 +46,17 @@ _******_API Swagger docs:_******_ https://app.swaggerhub.com/apis/lemk1/top_url_
         "uuid": "e138e75b-a5bd-4568-a841-f8a3f018e853",
         "url": "https://stackoverflow.com/questions/2444899/insert-or-update-on-table-violates-foreign-key-constraint",
         "title": "insert or update on table violates foreign key constraint",
-        "short_url": "http://localhost:8000/jEcPEg22",
+        "short_url": "http://url2.top/jEcPEg22",
         "clicks": 0,
-        "create_dttm": "2019-05-15 11:55:32.578040+03:00"
+        "create_dttm": "2019-06-15 11:55:32.578040+03:00"
     },
     {
         "uuid": "2e2ca33a-d9b8-496b-b47a-c092d8d7082b",
         "url": "https://marshmallow.readthedocs.io/en/3.0/",
         "title": "marshmallow: simplified object serialization¶",
-        "short_url": "http://localhost:8000/rvkoVaoq",
+        "short_url": "http://url2.top/rvkoVaoq",
         "clicks": 4,
-        "create_dttm": "2019-05-15 16:03:33.428849+03:00"
+        "create_dttm": "2019-06-15 16:03:33.428849+03:00"
     }
 ]`
 
