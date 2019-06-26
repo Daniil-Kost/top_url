@@ -1,4 +1,4 @@
-#### Welcome to "**Top Url**" (http://url2.top/home) repository!
+#### Welcome to "**Top Url**" (http://url2.top) repository!
 
 **This service define:** 
 1) Simple UI interface for creating short url link and get stats for it
