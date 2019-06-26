@@ -1,8 +1,8 @@
 import psycopg2
-import json
 from lemkpg.constants import GET_ALL_COLUMNS as ALL_COLUMNS
-from sanic.views import HTTPMethodView
 from sanic import response
+from sanic.views import HTTPMethodView
+from sanic.log import logger
 from http import HTTPStatus
 
 from .forms import CreateNewShortUrlForm, UserRegistrationForm, UserAuthForm
@@ -12,7 +12,6 @@ from .config import (
     USER_URLS_TABLE,
     URLS_COLUMNS,
     template,
-    DEFAULT_DOMAIN,
 )
 from .utils import (
     response_converter,
@@ -26,30 +25,25 @@ from .utils import (
 
 async def main_page(request):
     template_data = {}
-    errors = {}
     if request.method == 'POST':
         db_conn = request["db_conn"]
         data = {'url': request.form.get('url')}
-        form_data, errors = CreateNewShortUrlForm().load(data)
-        if errors:
-            errors["errors"] = [error for error in errors]
+        form_data, _ = CreateNewShortUrlForm().load(data)
         data = prepare_post_url_data(form_data)
+
         try:
             await db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
         except psycopg2.ProgrammingError as e:
-            pass
-            # return response.redirect(DEFAULT_DOMAIN)
+            logger.error(f"!!! EXCEPTION !!! Traceback: {e}")
 
         try:
             query_result = await db_conn.get(URLS_TABLE, ALL_COLUMNS,
                                              conditions_list=[("uuid", "=", data["uuid"], None)])
-
-            exclude_fields = ("id", "domain", "slug", "url", "clicks")
+            exclude_fields = ("id", "uuid", "domain", "slug", "url", "clicks")
             result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
             template_data["short_url"] = result[0]["short_url"]
         except psycopg2.ProgrammingError as e:
-            pass
-            # return response.redirect(DEFAULT_DOMAIN)
+            logger.error(f"!!! EXCEPTION !!! Traceback: {e}")
 
     return response.html(template.render(request=request, template_data=template_data))
 
@@ -73,6 +67,7 @@ class UrlsView(HTTPMethodView):
         try:
             await db_conn.insert(URLS_TABLE, tuple(data.values()), tuple(data.keys()))
         except psycopg2.ProgrammingError as e:
+            logger.error(f"!!! EXCEPTION !!! Traceback: {e}")
             return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
 
         try:
@@ -84,6 +79,7 @@ class UrlsView(HTTPMethodView):
             result = response_converter(query_result, URLS_COLUMNS, exclude_fields)
             return response.json(result[0], HTTPStatus.CREATED)
         except psycopg2.ProgrammingError as e:
+            logger.error(f"!!! EXCEPTION !!! Traceback: {e}")
             return response.json({"error": e}, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
@@ -120,6 +116,7 @@ class RegisterView(HTTPMethodView):
         try:
             await db_conn.insert(USER_TABLE, tuple(data.values()), tuple(data.keys()))
         except psycopg2.ProgrammingError as e:
+            logger.error(f"!!! EXCEPTION !!! Traceback: {e}")
             return response.json({"error": e}, HTTPStatus.BAD_REQUEST)
 
         query_result = await db_conn.get(USER_TABLE, ["id", "token"],
