@@ -55,5 +55,6 @@ def create_api():
     app.add_route(RedirectView.as_view(), '/<slug>', strict_slashes=False)
 
     app.add_route(main_page, '', strict_slashes=False, methods=["GET", "POST"])
+    app.add_route(main_page, '/home', strict_slashes=False, methods=["GET", "POST"])
 
     app.blueprint(api_v1)
